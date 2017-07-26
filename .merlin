@@ -1,3 +1,3 @@
 S src
 B _build/src
-PKG digestif.ocaml
+PKG digestif.ocaml yojson core atdgen
