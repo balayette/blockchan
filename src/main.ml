@@ -22,7 +22,7 @@ let () =
       Transaction.print_transaction t1; Transaction.print_transaction t2;
       let blc = Blockchain.new_blockchain () in
       Blockchain.print_blockchain blc;
-      let blo = Block.new_block (List.hd (Blockchain.get_blocks blc)) [t1; t2] in
+      let blo = Block.new_block (Blockchain.get_latest blc) [t1; t2] in
       Block.print_block blo;
       let blc = Blockchain.add_block blc blo in
       match blc with

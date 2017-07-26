@@ -47,3 +47,5 @@ let add_block bl b =
       )
     )
   )
+
+let get_latest bl = List.hd (get_blocks bl)

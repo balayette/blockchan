@@ -15,3 +15,6 @@ val print_blockchain : t -> unit
 
 (** Get the block count **)
 val get_count : t -> int
+
+(** Get the last block of the blockchain **)
+val get_latest : t -> Block.t
