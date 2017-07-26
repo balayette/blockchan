@@ -28,11 +28,11 @@ let block_hash timestamp transactions id =
   Crypto.block_hash timestamp (get_transactions_hashes transactions) id
 
 let genesis_block () =
-  {id = 0; prev_hash = "Genesis"; transactions = []; timestamp = 0; hash = (block_hash 0 [] 0)}
+  {id = 0; prev_hash = "Genesis"; transactions = []; timestamp = int_of_float (Unix.time ()); hash = (block_hash 0 [] 0)}
 
 let new_block last_block transactions =
   let id = (get_id last_block) + 1 in
-  let timestamp = id + 10 in
+  let timestamp = int_of_float (Unix.time ()) in
   let hash = block_hash timestamp transactions id in
   { id; prev_hash = last_block.hash; transactions; timestamp; hash}
 
