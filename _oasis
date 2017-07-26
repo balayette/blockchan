@@ -1,0 +1,15 @@
+Name: blockchan
+Version: 0.1
+Synopsis: blockchan
+Authors: Nicolas <nmanichon@gmail.com>
+License: GPL
+
+OASISFormat: 0.4
+BuildTools: ocamlbuild
+Plugins: META (0.4), DevFiles (0.4)
+
+Executable "blockchan"
+    Path: src/
+    MainIs: main.ml
+    CompiledObject: best
+    BuildDepends: digestif.ocaml
