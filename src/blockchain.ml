@@ -12,7 +12,7 @@ let get_count bl = bl.count
 let print_blockchain bl =
   Printf.printf "BLOCKCHAIN :\ncount : %d\nblocks : %s\n*************\n\n\n\n"
     (get_count bl)
-    (List.repr_of_hashes (List.map (fun b -> Block.get_hash b) (get_blocks bl)))
+    (List.repr_of_hashes (List.map (Block.get_hash) (get_blocks bl)))
 
 let create_blockchain count blocks =
   {count; blocks}

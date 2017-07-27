@@ -44,7 +44,7 @@ let print_block b =
   Printf.printf "BLOCK :\nid : %d\nprev_hash : %s\ntransactions : %s\ntimestamp : %d\nhash : %s\n#############\n\n\n"
     (get_id b)
     (get_previous_hash b)
-    (List.repr_of_hashes (List.map (fun (t : Transaction.t) -> Transaction.hash t) (get_transactions b)))
+    (List.repr_of_hashes (List.map (Transaction.hash) (get_transactions b)))
     (get_timestamp b)
     (get_hash b)
 
