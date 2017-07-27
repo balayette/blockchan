@@ -41,6 +41,14 @@ let transaction_type_of_int = function
   | 2 -> Some ARCHIVE
   | _ -> None
 
-let transaction_of_json tj =
+let transaction_of_json_ds tj =
   let open Json_ds_t in
   create_transaction tj.data tj.hash tj.data_len tj.timestamp
+
+let json_ds_of_transaction (tr : t) =
+  let open Json_ds_t in
+  {data = tr.data;
+   hash = tr.hash;
+   data_len = tr.data_len;
+   timestamp = tr.timestamp
+  }
