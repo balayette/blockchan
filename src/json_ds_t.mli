@@ -1,10 +1,18 @@
 (* Auto-generated from "json_ds.atd" *)
 
 
+type transaction_data_json = {
+  board: string;
+  kind: string;
+  username: string;
+  thread_name: string;
+  text: string;
+  thread_hash: string
+}
+
 type transaction_json = {
-  data: string;
+  data: transaction_data_json;
   hash: string;
-  data_len: int;
   timestamp: int
 }
 

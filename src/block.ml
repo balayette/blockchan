@@ -48,15 +48,17 @@ let print_block b =
     (get_timestamp b)
     (get_hash b)
 
-(* let block_of_json_ds bl = *)
-(*   let open Json_ds_t in *)
-(*   create_block bl.id bl.prev_hash (List.map (Transaction.transaction_of_json_ds) bl.transactions) bl.timestamp bl.hash *)
+let block_of_json_ds bl =
+  let open Json_ds_t in
+  let transactions = List.map (Transaction.transaction_of_json_ds) bl.transactions in
+  let filtered = List.filter (fun o -> match o with None -> false | _ -> true) transactions in
+  create_block bl.id bl.prev_hash filtered bl.timestamp bl.hash
 
-(* let json_ds_of_block (bl : t) = *)
-(*   let open Json_ds_t in *)
-(*   { id = bl.id; *)
-(*     prev_hash = bl.prev_hash; *)
-(*     transactions = List.map (Transaction.json_ds_of_transaction) bl.transactions; *)
-(*     timestamp = bl.timestamp; *)
-(*     hash = bl.hash *)
-(*   } *)
+let json_ds_of_block (bl : t) =
+  let open Json_ds_t in
+  { id = bl.id;
+    prev_hash = bl.prev_hash;
+    transactions = List.map (Transaction.json_ds_of_transaction) bl.transactions;
+    timestamp = bl.timestamp;
+    hash = bl.hash
+  }

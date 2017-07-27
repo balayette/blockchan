@@ -85,4 +85,20 @@ let print_transaction_data td =
   Printf.printf "   thread name : %s\n" td.thread_name;
   Printf.printf "   text : %s\n" td.text;
   Printf.printf "   thread_hash : %s\n" td.thread_hash;
-  print_string "....\n";
+  print_string "....\n"
+
+let transaction_data_of_json_ds ds =
+  let open Json_ds_t in
+  let b = board_of_string ds.board
+  and k = transaction_type_of_string ds.kind in
+  match (b, k) with
+  | (None, _) | (_, None) -> None
+  | (Some bo, Some ki) -> Some (new_transaction_data
+                            ~username:ds.username
+                            ~thread_name:ds.thread_name
+                            ~text:ds.text
+                            ~thread_hash:ds.thread_hash
+                            bo
+                            ki)
+
+let json_ds_of_transaction_data td = ()

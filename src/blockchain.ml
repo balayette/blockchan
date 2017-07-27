@@ -53,12 +53,12 @@ let add_block bl b =
 
 let get_latest bl = List.hd (get_blocks bl)
 
-(* let blockchain_of_json_ds bj = *)
-(*   let open Json_ds_t in *)
-(*   create_blockchain bj.count (List.map (Block.block_of_json_ds) bj.blocks) *)
+let blockchain_of_json_ds bj =
+  let open Json_ds_t in
+  create_blockchain bj.count (List.map (Block.block_of_json_ds) bj.blocks)
 
-(* let json_ds_of_blockchain (bl : t) = *)
-(*   let open Json_ds_t in *)
-(*   { count = bl.count; *)
-(*     blocks = List.map (Block.json_ds_of_block) bl.blocks *)
-(*   } *)
+let json_ds_of_blockchain (bl : t) =
+  let open Json_ds_t in
+  { count = bl.count;
+    blocks = List.map (Block.json_ds_of_block) bl.blocks
+  }

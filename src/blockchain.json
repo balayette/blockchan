@@ -14,15 +14,27 @@
             "prev_hash": "1 hash",
             "transactions": [
                 {
-                    "data": "1 data",
+                    "data": {
+                        "board": "g",
+                        "kind": "NEW_THREAD",
+                        "username": "Anonymous",
+                        "thread_name": "Thread 1",
+                        "text": "This is the OP",
+                        "thread_hash": "1 thread hash"
+                    },
                     "hash": "1 t hash",
-                    "data_len": 1,
                     "timestamp": 5
                 },
                 {
-                    "data": "2 data",
+                    "data": {
+                        "board": "g",
+                        "kind": "REPLY",
+                        "username": "Anonymous2",
+                        "thread_name": "",
+                        "text": "This is the reply",
+                        "thread_hash": "1 thread hash"
+                    },
                     "hash": "2 t hash",
-                    "data_len": 2,
                     "timestamp": 6
                 }
             ],

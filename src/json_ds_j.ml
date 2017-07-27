@@ -1,10 +1,18 @@
 (* Auto-generated from "json_ds.atd" *)
 
 
+type transaction_data_json = Json_ds_t.transaction_data_json = {
+  board: string;
+  kind: string;
+  username: string;
+  thread_name: string;
+  text: string;
+  thread_hash: string
+}
+
 type transaction_json = Json_ds_t.transaction_json = {
-  data: string;
+  data: transaction_data_json;
   hash: string;
-  data_len: int;
   timestamp: int
 }
 
@@ -21,6 +29,355 @@ type blockchain_json = Json_ds_t.blockchain_json = {
   blocks: block_json list
 }
 
+let write_transaction_data_json : _ -> transaction_data_json -> _ = (
+  fun ob x ->
+    Bi_outbuf.add_char ob '{';
+    let is_first = ref true in
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"board\":";
+    (
+      Yojson.Safe.write_string
+    )
+      ob x.board;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"kind\":";
+    (
+      Yojson.Safe.write_string
+    )
+      ob x.kind;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"username\":";
+    (
+      Yojson.Safe.write_string
+    )
+      ob x.username;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"thread_name\":";
+    (
+      Yojson.Safe.write_string
+    )
+      ob x.thread_name;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"text\":";
+    (
+      Yojson.Safe.write_string
+    )
+      ob x.text;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"thread_hash\":";
+    (
+      Yojson.Safe.write_string
+    )
+      ob x.thread_hash;
+    Bi_outbuf.add_char ob '}';
+)
+let string_of_transaction_data_json ?(len = 1024) x =
+  let ob = Bi_outbuf.create len in
+  write_transaction_data_json ob x;
+  Bi_outbuf.contents ob
+let read_transaction_data_json = (
+  fun p lb ->
+    Yojson.Safe.read_space p lb;
+    Yojson.Safe.read_lcurl p lb;
+    let field_board = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_kind = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_username = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_thread_name = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_text = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_thread_hash = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let bits0 = ref 0 in
+    try
+      Yojson.Safe.read_space p lb;
+      Yojson.Safe.read_object_end lb;
+      Yojson.Safe.read_space p lb;
+      let f =
+        fun s pos len ->
+          if pos < 0 || len < 0 || pos + len > String.length s then
+            invalid_arg "out-of-bounds substring position or length";
+          match len with
+            | 4 -> (
+                match String.unsafe_get s pos with
+                  | 'k' -> (
+                      if String.unsafe_get s (pos+1) = 'i' && String.unsafe_get s (pos+2) = 'n' && String.unsafe_get s (pos+3) = 'd' then (
+                        1
+                      )
+                      else (
+                        -1
+                      )
+                    )
+                  | 't' -> (
+                      if String.unsafe_get s (pos+1) = 'e' && String.unsafe_get s (pos+2) = 'x' && String.unsafe_get s (pos+3) = 't' then (
+                        4
+                      )
+                      else (
+                        -1
+                      )
+                    )
+                  | _ -> (
+                      -1
+                    )
+              )
+            | 5 -> (
+                if String.unsafe_get s pos = 'b' && String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'a' && String.unsafe_get s (pos+3) = 'r' && String.unsafe_get s (pos+4) = 'd' then (
+                  0
+                )
+                else (
+                  -1
+                )
+              )
+            | 8 -> (
+                if String.unsafe_get s pos = 'u' && String.unsafe_get s (pos+1) = 's' && String.unsafe_get s (pos+2) = 'e' && String.unsafe_get s (pos+3) = 'r' && String.unsafe_get s (pos+4) = 'n' && String.unsafe_get s (pos+5) = 'a' && String.unsafe_get s (pos+6) = 'm' && String.unsafe_get s (pos+7) = 'e' then (
+                  2
+                )
+                else (
+                  -1
+                )
+              )
+            | 11 -> (
+                if String.unsafe_get s pos = 't' && String.unsafe_get s (pos+1) = 'h' && String.unsafe_get s (pos+2) = 'r' && String.unsafe_get s (pos+3) = 'e' && String.unsafe_get s (pos+4) = 'a' && String.unsafe_get s (pos+5) = 'd' && String.unsafe_get s (pos+6) = '_' then (
+                  match String.unsafe_get s (pos+7) with
+                    | 'h' -> (
+                        if String.unsafe_get s (pos+8) = 'a' && String.unsafe_get s (pos+9) = 's' && String.unsafe_get s (pos+10) = 'h' then (
+                          5
+                        )
+                        else (
+                          -1
+                        )
+                      )
+                    | 'n' -> (
+                        if String.unsafe_get s (pos+8) = 'a' && String.unsafe_get s (pos+9) = 'm' && String.unsafe_get s (pos+10) = 'e' then (
+                          3
+                        )
+                        else (
+                          -1
+                        )
+                      )
+                    | _ -> (
+                        -1
+                      )
+                )
+                else (
+                  -1
+                )
+              )
+            | _ -> (
+                -1
+              )
+      in
+      let i = Yojson.Safe.map_ident p f lb in
+      Ag_oj_run.read_until_field_value p lb;
+      (
+        match i with
+          | 0 ->
+            field_board := (
+              (
+                Ag_oj_run.read_string
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x1;
+          | 1 ->
+            field_kind := (
+              (
+                Ag_oj_run.read_string
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x2;
+          | 2 ->
+            field_username := (
+              (
+                Ag_oj_run.read_string
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x4;
+          | 3 ->
+            field_thread_name := (
+              (
+                Ag_oj_run.read_string
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x8;
+          | 4 ->
+            field_text := (
+              (
+                Ag_oj_run.read_string
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x10;
+          | 5 ->
+            field_thread_hash := (
+              (
+                Ag_oj_run.read_string
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x20;
+          | _ -> (
+              Yojson.Safe.skip_json p lb
+            )
+      );
+      while true do
+        Yojson.Safe.read_space p lb;
+        Yojson.Safe.read_object_sep p lb;
+        Yojson.Safe.read_space p lb;
+        let f =
+          fun s pos len ->
+            if pos < 0 || len < 0 || pos + len > String.length s then
+              invalid_arg "out-of-bounds substring position or length";
+            match len with
+              | 4 -> (
+                  match String.unsafe_get s pos with
+                    | 'k' -> (
+                        if String.unsafe_get s (pos+1) = 'i' && String.unsafe_get s (pos+2) = 'n' && String.unsafe_get s (pos+3) = 'd' then (
+                          1
+                        )
+                        else (
+                          -1
+                        )
+                      )
+                    | 't' -> (
+                        if String.unsafe_get s (pos+1) = 'e' && String.unsafe_get s (pos+2) = 'x' && String.unsafe_get s (pos+3) = 't' then (
+                          4
+                        )
+                        else (
+                          -1
+                        )
+                      )
+                    | _ -> (
+                        -1
+                      )
+                )
+              | 5 -> (
+                  if String.unsafe_get s pos = 'b' && String.unsafe_get s (pos+1) = 'o' && String.unsafe_get s (pos+2) = 'a' && String.unsafe_get s (pos+3) = 'r' && String.unsafe_get s (pos+4) = 'd' then (
+                    0
+                  )
+                  else (
+                    -1
+                  )
+                )
+              | 8 -> (
+                  if String.unsafe_get s pos = 'u' && String.unsafe_get s (pos+1) = 's' && String.unsafe_get s (pos+2) = 'e' && String.unsafe_get s (pos+3) = 'r' && String.unsafe_get s (pos+4) = 'n' && String.unsafe_get s (pos+5) = 'a' && String.unsafe_get s (pos+6) = 'm' && String.unsafe_get s (pos+7) = 'e' then (
+                    2
+                  )
+                  else (
+                    -1
+                  )
+                )
+              | 11 -> (
+                  if String.unsafe_get s pos = 't' && String.unsafe_get s (pos+1) = 'h' && String.unsafe_get s (pos+2) = 'r' && String.unsafe_get s (pos+3) = 'e' && String.unsafe_get s (pos+4) = 'a' && String.unsafe_get s (pos+5) = 'd' && String.unsafe_get s (pos+6) = '_' then (
+                    match String.unsafe_get s (pos+7) with
+                      | 'h' -> (
+                          if String.unsafe_get s (pos+8) = 'a' && String.unsafe_get s (pos+9) = 's' && String.unsafe_get s (pos+10) = 'h' then (
+                            5
+                          )
+                          else (
+                            -1
+                          )
+                        )
+                      | 'n' -> (
+                          if String.unsafe_get s (pos+8) = 'a' && String.unsafe_get s (pos+9) = 'm' && String.unsafe_get s (pos+10) = 'e' then (
+                            3
+                          )
+                          else (
+                            -1
+                          )
+                        )
+                      | _ -> (
+                          -1
+                        )
+                  )
+                  else (
+                    -1
+                  )
+                )
+              | _ -> (
+                  -1
+                )
+        in
+        let i = Yojson.Safe.map_ident p f lb in
+        Ag_oj_run.read_until_field_value p lb;
+        (
+          match i with
+            | 0 ->
+              field_board := (
+                (
+                  Ag_oj_run.read_string
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x1;
+            | 1 ->
+              field_kind := (
+                (
+                  Ag_oj_run.read_string
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x2;
+            | 2 ->
+              field_username := (
+                (
+                  Ag_oj_run.read_string
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x4;
+            | 3 ->
+              field_thread_name := (
+                (
+                  Ag_oj_run.read_string
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x8;
+            | 4 ->
+              field_text := (
+                (
+                  Ag_oj_run.read_string
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x10;
+            | 5 ->
+              field_thread_hash := (
+                (
+                  Ag_oj_run.read_string
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x20;
+            | _ -> (
+                Yojson.Safe.skip_json p lb
+              )
+        );
+      done;
+      assert false;
+    with Yojson.End_of_object -> (
+        if !bits0 <> 0x3f then Ag_oj_run.missing_fields p [| !bits0 |] [| "board"; "kind"; "username"; "thread_name"; "text"; "thread_hash" |];
+        (
+          {
+            board = !field_board;
+            kind = !field_kind;
+            username = !field_username;
+            thread_name = !field_thread_name;
+            text = !field_text;
+            thread_hash = !field_thread_hash;
+          }
+         : transaction_data_json)
+      )
+)
+let transaction_data_json_of_string s =
+  read_transaction_data_json (Yojson.Safe.init_lexer ()) (Lexing.from_string s)
 let write_transaction_json : _ -> transaction_json -> _ = (
   fun ob x ->
     Bi_outbuf.add_char ob '{';
@@ -31,7 +388,7 @@ let write_transaction_json : _ -> transaction_json -> _ = (
       Bi_outbuf.add_char ob ',';
     Bi_outbuf.add_string ob "\"data\":";
     (
-      Yojson.Safe.write_string
+      write_transaction_data_json
     )
       ob x.data;
     if !is_first then
@@ -43,15 +400,6 @@ let write_transaction_json : _ -> transaction_json -> _ = (
       Yojson.Safe.write_string
     )
       ob x.hash;
-    if !is_first then
-      is_first := false
-    else
-      Bi_outbuf.add_char ob ',';
-    Bi_outbuf.add_string ob "\"data_len\":";
-    (
-      Yojson.Safe.write_int
-    )
-      ob x.data_len;
     if !is_first then
       is_first := false
     else
@@ -73,7 +421,6 @@ let read_transaction_json = (
     Yojson.Safe.read_lcurl p lb;
     let field_data = ref (Obj.magic (Sys.opaque_identity 0.0)) in
     let field_hash = ref (Obj.magic (Sys.opaque_identity 0.0)) in
-    let field_data_len = ref (Obj.magic (Sys.opaque_identity 0.0)) in
     let field_timestamp = ref (Obj.magic (Sys.opaque_identity 0.0)) in
     let bits0 = ref 0 in
     try
@@ -107,17 +454,9 @@ let read_transaction_json = (
                       -1
                     )
               )
-            | 8 -> (
-                if String.unsafe_get s pos = 'd' && String.unsafe_get s (pos+1) = 'a' && String.unsafe_get s (pos+2) = 't' && String.unsafe_get s (pos+3) = 'a' && String.unsafe_get s (pos+4) = '_' && String.unsafe_get s (pos+5) = 'l' && String.unsafe_get s (pos+6) = 'e' && String.unsafe_get s (pos+7) = 'n' then (
-                  2
-                )
-                else (
-                  -1
-                )
-              )
             | 9 -> (
                 if String.unsafe_get s pos = 't' && String.unsafe_get s (pos+1) = 'i' && String.unsafe_get s (pos+2) = 'm' && String.unsafe_get s (pos+3) = 'e' && String.unsafe_get s (pos+4) = 's' && String.unsafe_get s (pos+5) = 't' && String.unsafe_get s (pos+6) = 'a' && String.unsafe_get s (pos+7) = 'm' && String.unsafe_get s (pos+8) = 'p' then (
-                  3
+                  2
                 )
                 else (
                   -1
@@ -134,7 +473,7 @@ let read_transaction_json = (
           | 0 ->
             field_data := (
               (
-                Ag_oj_run.read_string
+                read_transaction_data_json
               ) p lb
             );
             bits0 := !bits0 lor 0x1;
@@ -146,19 +485,12 @@ let read_transaction_json = (
             );
             bits0 := !bits0 lor 0x2;
           | 2 ->
-            field_data_len := (
-              (
-                Ag_oj_run.read_int
-              ) p lb
-            );
-            bits0 := !bits0 lor 0x4;
-          | 3 ->
             field_timestamp := (
               (
                 Ag_oj_run.read_int
               ) p lb
             );
-            bits0 := !bits0 lor 0x8;
+            bits0 := !bits0 lor 0x4;
           | _ -> (
               Yojson.Safe.skip_json p lb
             )
@@ -194,17 +526,9 @@ let read_transaction_json = (
                         -1
                       )
                 )
-              | 8 -> (
-                  if String.unsafe_get s pos = 'd' && String.unsafe_get s (pos+1) = 'a' && String.unsafe_get s (pos+2) = 't' && String.unsafe_get s (pos+3) = 'a' && String.unsafe_get s (pos+4) = '_' && String.unsafe_get s (pos+5) = 'l' && String.unsafe_get s (pos+6) = 'e' && String.unsafe_get s (pos+7) = 'n' then (
-                    2
-                  )
-                  else (
-                    -1
-                  )
-                )
               | 9 -> (
                   if String.unsafe_get s pos = 't' && String.unsafe_get s (pos+1) = 'i' && String.unsafe_get s (pos+2) = 'm' && String.unsafe_get s (pos+3) = 'e' && String.unsafe_get s (pos+4) = 's' && String.unsafe_get s (pos+5) = 't' && String.unsafe_get s (pos+6) = 'a' && String.unsafe_get s (pos+7) = 'm' && String.unsafe_get s (pos+8) = 'p' then (
-                    3
+                    2
                   )
                   else (
                     -1
@@ -221,7 +545,7 @@ let read_transaction_json = (
             | 0 ->
               field_data := (
                 (
-                  Ag_oj_run.read_string
+                  read_transaction_data_json
                 ) p lb
               );
               bits0 := !bits0 lor 0x1;
@@ -233,19 +557,12 @@ let read_transaction_json = (
               );
               bits0 := !bits0 lor 0x2;
             | 2 ->
-              field_data_len := (
-                (
-                  Ag_oj_run.read_int
-                ) p lb
-              );
-              bits0 := !bits0 lor 0x4;
-            | 3 ->
               field_timestamp := (
                 (
                   Ag_oj_run.read_int
                 ) p lb
               );
-              bits0 := !bits0 lor 0x8;
+              bits0 := !bits0 lor 0x4;
             | _ -> (
                 Yojson.Safe.skip_json p lb
               )
@@ -253,12 +570,11 @@ let read_transaction_json = (
       done;
       assert false;
     with Yojson.End_of_object -> (
-        if !bits0 <> 0xf then Ag_oj_run.missing_fields p [| !bits0 |] [| "data"; "hash"; "data_len"; "timestamp" |];
+        if !bits0 <> 0x7 then Ag_oj_run.missing_fields p [| !bits0 |] [| "data"; "hash"; "timestamp" |];
         (
           {
             data = !field_data;
             hash = !field_hash;
-            data_len = !field_data_len;
             timestamp = !field_timestamp;
           }
          : transaction_json)
