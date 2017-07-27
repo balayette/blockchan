@@ -27,20 +27,27 @@ let get_transactions_hashes transactions =
 let block_hash timestamp transactions id =
   Crypto.block_hash timestamp (get_transactions_hashes transactions) id
 
+
+let create_block id prev_hash transactions timestamp hash =
+  {id; prev_hash; transactions; timestamp; hash}
+
 let genesis_block () =
-  {id = 0; prev_hash = "Genesis"; transactions = []; timestamp = int_of_float (Unix.time ()); hash = (block_hash 0 [] 0)}
+  create_block 0 "Genesis" [] (int_of_float (Unix.time ())) (block_hash 0 [] 0)
 
 let new_block last_block transactions =
   let id = (get_id last_block) + 1 in
   let timestamp = int_of_float (Unix.time ()) in
   let hash = block_hash timestamp transactions id in
-  { id; prev_hash = last_block.hash; transactions; timestamp; hash}
+  create_block id last_block.hash transactions timestamp hash
 
 let print_block b =
   Printf.printf "BLOCK :\nid : %d\nprev_hash : %s\ntransactions : %s\ntimestamp : %d\nhash : %s\n#############\n\n\n"
-
     (get_id b)
     (get_previous_hash b)
     (List.repr_of_hashes (List.map (fun (t : Transaction.t) -> Transaction.hash t) (get_transactions b)))
     (get_timestamp b)
     (get_hash b)
+
+let block_of_json bl =
+  let open Json_ds_t in
+  create_block bl.id bl.prev_hash (List.map (Transaction.transaction_of_json) bl.transactions) bl.timestamp bl.hash

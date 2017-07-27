@@ -18,3 +18,6 @@ val get_count : t -> int
 
 (** Get the last block of the blockchain **)
 val get_latest : t -> Block.t
+
+(** Convert a Json_ds_t.blockchain_json to a blockchain **)
+val blockchain_of_json : Json_ds_t.blockchain_json -> t

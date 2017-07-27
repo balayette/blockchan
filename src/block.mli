@@ -27,3 +27,6 @@ val print_block : t -> unit
 
 (** Get the hash of the block **)
 val get_hash : t -> string
+
+(** Convert a Json_ds_t.block_json to a transaction **)
+val block_of_json : Json_ds_t.block_json -> t

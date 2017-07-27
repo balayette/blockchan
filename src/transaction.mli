@@ -24,3 +24,6 @@ val int_of_transaction_type : transaction_type -> int
 
 (** Convert an int to a transaction_type **)
 val transaction_type_of_int : int -> transaction_type option
+
+(** Convert a Json_ds_t.transaction_json to a transaction **)
+val transaction_of_json : Json_ds_t.transaction_json -> t

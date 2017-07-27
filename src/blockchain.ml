@@ -14,12 +14,15 @@ let print_blockchain bl =
     (get_count bl)
     (List.repr_of_hashes (List.map (fun b -> Block.get_hash b) (get_blocks bl)))
 
+let create_blockchain count blocks =
+  {count; blocks}
+
 let new_blockchain () =
   let count = 1 in
   let genesis = Block.genesis_block () in
   print_string "Genesis block : \n";
   Block.print_block genesis;
-  {count = count; blocks = [genesis]}
+  create_blockchain count [genesis]
 
 (* TODO : Actual error handling *)
 let add_block bl b =
@@ -49,3 +52,7 @@ let add_block bl b =
   )
 
 let get_latest bl = List.hd (get_blocks bl)
+
+let blockchain_of_json bj =
+  let open Json_ds_t in
+  create_blockchain bj.count (List.map (Block.block_of_json) bj.blocks)

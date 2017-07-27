@@ -37,4 +37,5 @@ let greetings () =
 (* let () = *)
 (*   let str = Core.In_channel.read_all "src/blockchain.json" in *)
 (*   let blc = Json_ds_j.blockchain_json_of_string str in *)
-(*   print_int blc.count *)
+(*   let acblc = Blockchain.blockchain_of_json blc in *)
+(*   Blockchain.print_blockchain acblc; *)
