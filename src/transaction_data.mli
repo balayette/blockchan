@@ -14,7 +14,7 @@ type boards =
 type t
 
 (** Create a new transaction **)
-val new_transaction_data : boards -> transaction_type -> ?string -> ?string -> ?string -> ?string
+val new_transaction_data : ?username:string -> ?thread_name:string -> ?text:string -> ?thread_hash:string ->boards -> transaction_type ->  t
 
 (** Convert a 'boards' into its string representation**)
 val string_of_board : boards -> string
@@ -22,8 +22,11 @@ val string_of_board : boards -> string
 (** Converts a string representation into a 'boards' **)
 val board_of_string : string -> boards option
 
-(** Converts a 'transaction_type' to an int **)
-val int_of_transaction_type : transaction_type -> int
+(** Converts a 'transaction_type' to a string **)
+val string_of_transaction_type : transaction_type -> string
 
-(** Converts an int to a 'transaction_type' **)
-val transaction_type_of_int : int -> transaction_type option
+(** Converts a string to a 'transaction_type' **)
+val transaction_type_of_string : string -> transaction_type option
+
+(** Prints the transaction data **)
+val print_transaction_data : t -> unit

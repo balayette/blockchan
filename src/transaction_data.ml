@@ -36,12 +36,12 @@ type t =
   }
 
 let new_transaction_data
-    board
-    kind
     ?(username="Anonymous")
     ?(thread_name="")
     ?(text="I forgot to type a text and should be killed.")
-    ?(thread_hash="") =
+    ?(thread_hash="")
+    board
+    kind =
   {board; kind; username; thread_name; text; thread_hash}
 
 let string_of_board = function
@@ -55,13 +55,23 @@ let board_of_string = function
   | "b" -> Some RANDOM
   | _ -> None
 
-let int_of_transaction_type = function
-  | NEW_THREAD -> 0
-  | REPLY -> 1
-  | ARCHIVE -> 2
-
-let transaction_type_of_int = function
-  | 0 -> Some NEW_THREAD
-  | 1 -> Some REPLY
-  | 2 -> Some ARCHIVE
+let transaction_type_of_string = function
+  | "NEW_THREAD" -> Some NEW_THREAD
+  | "REPLY" -> Some REPLY
+  | "ARCHIVE" -> Some ARCHIVE
   | _ -> None
+
+let string_of_transaction_type = function
+  | NEW_THREAD -> "NEW THREAD"
+  | REPLY -> "REPLY"
+  | ARCHIVE -> "ARCHIVE"
+
+let print_transaction_data td =
+  Printf.printf "Transaction data :\n";
+  Printf.printf "   type : %s\n" (string_of_transaction_type td.kind);
+  Printf.printf "   board : %s\n" (string_of_board td.board);
+  Printf.printf "   username : %s\n" td.username;
+  Printf.printf "   thread name : %s\n" td.thread_name;
+  Printf.printf "   text : %s\n" td.text;
+  Printf.printf "   thread_hash : %s\n" td.thread_hash;
+  print_string "....\n";
