@@ -5,11 +5,6 @@ type t =
     timestamp : int;
   }
 
-type transaction_type =
-  | NEW_THREAD
-  | REPLY
-  | ARCHIVE
-
 let print_transaction t =
   Printf.printf "TRANSACTION:\ndata : %s\nhash : %s\nlength: %d\ntimestamp : %d\n-------------\n\n\n" t.data t.hash t.data_len t.timestamp
 
