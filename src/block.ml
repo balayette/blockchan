@@ -51,7 +51,7 @@ let print_block b =
 let block_of_json_ds bl =
   let open Json_ds_t in
   let transactions = List.map (Transaction.transaction_of_json_ds) bl.transactions in
-  let filtered = List.filter (fun o -> match o with None -> false | _ -> true) transactions in
+  let filtered = List.remove_options transactions in
   create_block bl.id bl.prev_hash filtered bl.timestamp bl.hash
 
 let json_ds_of_block (bl : t) =

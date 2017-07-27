@@ -101,4 +101,12 @@ let transaction_data_of_json_ds ds =
                             bo
                             ki)
 
-let json_ds_of_transaction_data td = ()
+let json_ds_of_transaction_data (td : t) =
+  let open Json_ds_t in
+  { board = (string_of_board td.board);
+    kind = (string_of_transaction_type td.kind);
+    username = td.username;
+    thread_name = td.thread_name;
+    text = td.text;
+    thread_hash = td.thread_hash
+  }

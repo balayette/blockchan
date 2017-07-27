@@ -14,7 +14,7 @@ val hash : t -> string
 val data : t -> Transaction_data.t
 
 (** Convert a Json_ds_t.transaction_json to a transaction **)
-val transaction_of_json_ds : Json_ds_t.transaction_json -> t
+val transaction_of_json_ds : Json_ds_t.transaction_json -> t option
 
 (** Convert a transaction into a Json_ds_t.transaction_json **)
 val json_ds_of_transaction : t -> Json_ds_t.transaction_json

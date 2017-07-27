@@ -22,14 +22,14 @@ let data tr = tr.data
 
 let transaction_of_json_ds tj =
   let open Json_ds_t in
-  let t_data = Transaction_data.transaction_data_of_json_ds t.data in
+  let t_data = Transaction_data.transaction_data_of_json_ds tj.data in
   match t_data with
   | None -> None
-  | Some x -> Some (create_transaction t_data tj.hash tj.timestamp)
+  | Some x -> Some (create_transaction x tj.hash tj.timestamp)
 
 let json_ds_of_transaction (tr : t) =
   let open Json_ds_t in
-  {data = (Transaction_data.json_ds_of_transaction_data tr.data));
+  {data = (Transaction_data.json_ds_of_transaction_data tr.data);
    hash = tr.hash;
    timestamp = tr.timestamp
   }
