@@ -1,5 +1,19 @@
 let hash_data data = Digestif.SHA256.Bytes.digest data |> Digestif.SHA256.Bytes.to_hex
-let transaction_hash = hash_data
+
+let transaction_hash data =
+  let open Transaction_data in
+  let board_s = (get_board data) |> string_of_board
+  and kind_s = (get_kind data) |> string_of_transaction_type
+  and username_s = (get_username data)
+  and thread_name_s = (get_thread_name data)
+  and text_s = (get_text data)
+  and t_hash_s = (get_thread_hash data) in
+  String.concat board_s [kind_s;
+                         username_s;
+                         thread_name_s;
+                         thread_name_s;
+                         text_s;
+                         t_hash_s] |> hash_data
 
 let block_hash timestamp hashes id =
   let rec concat_hashes l acc = match l with

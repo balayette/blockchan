@@ -30,3 +30,21 @@ val transaction_type_of_string : string -> transaction_type option
 
 (** Prints the transaction data **)
 val print_transaction_data : t -> unit
+
+(** Get the board **)
+val get_board : t -> boards
+
+(** Get the kind **)
+val get_kind : t -> transaction_type
+
+(** Get the username **)
+val get_username : t -> string
+
+(** Get the thread_name **)
+val get_thread_name : t -> string
+
+(** Get the text **)
+val get_text : t -> string
+
+(** Get the thread_hash **)
+val get_thread_hash : t -> string

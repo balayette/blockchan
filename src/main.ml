@@ -34,6 +34,12 @@ let greetings () =
 (*   | _ -> () *)
 
 
+(* let () = *)
+(*   greetings (); *)
+(*   let a = Transaction_data.new_transaction_data (Transaction_data.CONSUMER_TECH) (Transaction_data.NEW_THREAD) in *)
+(*   let tr = Transaction.new_transaction a in *)
+(*   Transaction.print_transaction tr;; *)
+
 (* open Json_ds_t *)
 
 (* let () = *)

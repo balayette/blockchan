@@ -32,8 +32,19 @@ type t =
        - thread_hash : the hash of the thread that will be archived
     *)
     thread_hash : string;
-
   }
+
+let get_board t = t.board
+
+let get_kind t = t.kind
+
+let get_username t = t.username
+
+let get_thread_name t = t.thread_name
+
+let get_text t = t.text
+
+let get_thread_hash t = t.thread_hash
 
 let new_transaction_data
     ?(username="Anonymous")
