@@ -10,12 +10,12 @@ Plugins: META (0.4), DevFiles (0.4)
 
 Executable "server"
     Path: src/
-    MainIs: server.ml
+    MainIs: serv.ml
     CompiledObject: best
-    BuildDepends: digestif.ocaml, yojson, core, threads, atdgen
+    BuildDepends: digestif.ocaml, yojson, core, threads, atdgen, cohttp-lwt-unix, lwt
 
 Executable "client"
     Path: src/
     MainIs: client.ml
     CompiledObject: best
-    BuildDepends: digestif.ocaml, yojson, core, threads, atdgen
+    BuildDepends: digestif.ocaml, yojson, core, threads, atdgen, cohttp-lwt-unix, lwt
