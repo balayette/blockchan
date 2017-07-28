@@ -8,8 +8,14 @@ OASISFormat: 0.4
 BuildTools: ocamlbuild
 Plugins: META (0.4), DevFiles (0.4)
 
-Executable "blockchan"
+Executable "server"
     Path: src/
-    MainIs: main.ml
+    MainIs: server.ml
+    CompiledObject: best
+    BuildDepends: digestif.ocaml, yojson, core, threads, atdgen
+
+Executable "client"
+    Path: src/
+    MainIs: client.ml
     CompiledObject: best
     BuildDepends: digestif.ocaml, yojson, core, threads, atdgen
