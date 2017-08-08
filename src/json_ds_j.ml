@@ -18,6 +18,7 @@ type transaction_json = Json_ds_t.transaction_json = {
 }
 
 type block_json = Json_ds_t.block_json = {
+  version: int;
   id: int;
   prev_hash: string;
   transactions: transaction_json list;
@@ -648,6 +649,15 @@ let write_block_json : _ -> block_json -> _ = (
       is_first := false
     else
       Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"version\":";
+    (
+      Yojson.Safe.write_int
+    )
+      ob x.version;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
     Bi_outbuf.add_string ob "\"id\":";
     (
       Yojson.Safe.write_int
@@ -699,6 +709,7 @@ let read_block_json = (
   fun p lb ->
     Yojson.Safe.read_space p lb;
     Yojson.Safe.read_lcurl p lb;
+    let field_version = ref (Obj.magic (Sys.opaque_identity 0.0)) in
     let field_id = ref (Obj.magic (Sys.opaque_identity 0.0)) in
     let field_prev_hash = ref (Obj.magic (Sys.opaque_identity 0.0)) in
     let field_transactions = ref (Obj.magic (Sys.opaque_identity 0.0)) in
@@ -716,7 +727,7 @@ let read_block_json = (
           match len with
             | 2 -> (
                 if String.unsafe_get s pos = 'i' && String.unsafe_get s (pos+1) = 'd' then (
-                  0
+                  1
                 )
                 else (
                   -1
@@ -724,7 +735,15 @@ let read_block_json = (
               )
             | 4 -> (
                 if String.unsafe_get s pos = 'h' && String.unsafe_get s (pos+1) = 'a' && String.unsafe_get s (pos+2) = 's' && String.unsafe_get s (pos+3) = 'h' then (
-                  4
+                  5
+                )
+                else (
+                  -1
+                )
+              )
+            | 7 -> (
+                if String.unsafe_get s pos = 'v' && String.unsafe_get s (pos+1) = 'e' && String.unsafe_get s (pos+2) = 'r' && String.unsafe_get s (pos+3) = 's' && String.unsafe_get s (pos+4) = 'i' && String.unsafe_get s (pos+5) = 'o' && String.unsafe_get s (pos+6) = 'n' then (
+                  0
                 )
                 else (
                   -1
@@ -734,7 +753,7 @@ let read_block_json = (
                 match String.unsafe_get s pos with
                   | 'p' -> (
                       if String.unsafe_get s (pos+1) = 'r' && String.unsafe_get s (pos+2) = 'e' && String.unsafe_get s (pos+3) = 'v' && String.unsafe_get s (pos+4) = '_' && String.unsafe_get s (pos+5) = 'h' && String.unsafe_get s (pos+6) = 'a' && String.unsafe_get s (pos+7) = 's' && String.unsafe_get s (pos+8) = 'h' then (
-                        1
+                        2
                       )
                       else (
                         -1
@@ -742,7 +761,7 @@ let read_block_json = (
                     )
                   | 't' -> (
                       if String.unsafe_get s (pos+1) = 'i' && String.unsafe_get s (pos+2) = 'm' && String.unsafe_get s (pos+3) = 'e' && String.unsafe_get s (pos+4) = 's' && String.unsafe_get s (pos+5) = 't' && String.unsafe_get s (pos+6) = 'a' && String.unsafe_get s (pos+7) = 'm' && String.unsafe_get s (pos+8) = 'p' then (
-                        3
+                        4
                       )
                       else (
                         -1
@@ -754,7 +773,7 @@ let read_block_json = (
               )
             | 12 -> (
                 if String.unsafe_get s pos = 't' && String.unsafe_get s (pos+1) = 'r' && String.unsafe_get s (pos+2) = 'a' && String.unsafe_get s (pos+3) = 'n' && String.unsafe_get s (pos+4) = 's' && String.unsafe_get s (pos+5) = 'a' && String.unsafe_get s (pos+6) = 'c' && String.unsafe_get s (pos+7) = 't' && String.unsafe_get s (pos+8) = 'i' && String.unsafe_get s (pos+9) = 'o' && String.unsafe_get s (pos+10) = 'n' && String.unsafe_get s (pos+11) = 's' then (
-                  2
+                  3
                 )
                 else (
                   -1
@@ -769,40 +788,47 @@ let read_block_json = (
       (
         match i with
           | 0 ->
-            field_id := (
+            field_version := (
               (
                 Ag_oj_run.read_int
               ) p lb
             );
             bits0 := !bits0 lor 0x1;
           | 1 ->
+            field_id := (
+              (
+                Ag_oj_run.read_int
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x2;
+          | 2 ->
             field_prev_hash := (
               (
                 Ag_oj_run.read_string
               ) p lb
             );
-            bits0 := !bits0 lor 0x2;
-          | 2 ->
+            bits0 := !bits0 lor 0x4;
+          | 3 ->
             field_transactions := (
               (
                 read__1
               ) p lb
             );
-            bits0 := !bits0 lor 0x4;
-          | 3 ->
+            bits0 := !bits0 lor 0x8;
+          | 4 ->
             field_timestamp := (
               (
                 Ag_oj_run.read_int
               ) p lb
             );
-            bits0 := !bits0 lor 0x8;
-          | 4 ->
+            bits0 := !bits0 lor 0x10;
+          | 5 ->
             field_hash := (
               (
                 Ag_oj_run.read_string
               ) p lb
             );
-            bits0 := !bits0 lor 0x10;
+            bits0 := !bits0 lor 0x20;
           | _ -> (
               Yojson.Safe.skip_json p lb
             )
@@ -818,7 +844,7 @@ let read_block_json = (
             match len with
               | 2 -> (
                   if String.unsafe_get s pos = 'i' && String.unsafe_get s (pos+1) = 'd' then (
-                    0
+                    1
                   )
                   else (
                     -1
@@ -826,7 +852,15 @@ let read_block_json = (
                 )
               | 4 -> (
                   if String.unsafe_get s pos = 'h' && String.unsafe_get s (pos+1) = 'a' && String.unsafe_get s (pos+2) = 's' && String.unsafe_get s (pos+3) = 'h' then (
-                    4
+                    5
+                  )
+                  else (
+                    -1
+                  )
+                )
+              | 7 -> (
+                  if String.unsafe_get s pos = 'v' && String.unsafe_get s (pos+1) = 'e' && String.unsafe_get s (pos+2) = 'r' && String.unsafe_get s (pos+3) = 's' && String.unsafe_get s (pos+4) = 'i' && String.unsafe_get s (pos+5) = 'o' && String.unsafe_get s (pos+6) = 'n' then (
+                    0
                   )
                   else (
                     -1
@@ -836,7 +870,7 @@ let read_block_json = (
                   match String.unsafe_get s pos with
                     | 'p' -> (
                         if String.unsafe_get s (pos+1) = 'r' && String.unsafe_get s (pos+2) = 'e' && String.unsafe_get s (pos+3) = 'v' && String.unsafe_get s (pos+4) = '_' && String.unsafe_get s (pos+5) = 'h' && String.unsafe_get s (pos+6) = 'a' && String.unsafe_get s (pos+7) = 's' && String.unsafe_get s (pos+8) = 'h' then (
-                          1
+                          2
                         )
                         else (
                           -1
@@ -844,7 +878,7 @@ let read_block_json = (
                       )
                     | 't' -> (
                         if String.unsafe_get s (pos+1) = 'i' && String.unsafe_get s (pos+2) = 'm' && String.unsafe_get s (pos+3) = 'e' && String.unsafe_get s (pos+4) = 's' && String.unsafe_get s (pos+5) = 't' && String.unsafe_get s (pos+6) = 'a' && String.unsafe_get s (pos+7) = 'm' && String.unsafe_get s (pos+8) = 'p' then (
-                          3
+                          4
                         )
                         else (
                           -1
@@ -856,7 +890,7 @@ let read_block_json = (
                 )
               | 12 -> (
                   if String.unsafe_get s pos = 't' && String.unsafe_get s (pos+1) = 'r' && String.unsafe_get s (pos+2) = 'a' && String.unsafe_get s (pos+3) = 'n' && String.unsafe_get s (pos+4) = 's' && String.unsafe_get s (pos+5) = 'a' && String.unsafe_get s (pos+6) = 'c' && String.unsafe_get s (pos+7) = 't' && String.unsafe_get s (pos+8) = 'i' && String.unsafe_get s (pos+9) = 'o' && String.unsafe_get s (pos+10) = 'n' && String.unsafe_get s (pos+11) = 's' then (
-                    2
+                    3
                   )
                   else (
                     -1
@@ -871,40 +905,47 @@ let read_block_json = (
         (
           match i with
             | 0 ->
-              field_id := (
+              field_version := (
                 (
                   Ag_oj_run.read_int
                 ) p lb
               );
               bits0 := !bits0 lor 0x1;
             | 1 ->
+              field_id := (
+                (
+                  Ag_oj_run.read_int
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x2;
+            | 2 ->
               field_prev_hash := (
                 (
                   Ag_oj_run.read_string
                 ) p lb
               );
-              bits0 := !bits0 lor 0x2;
-            | 2 ->
+              bits0 := !bits0 lor 0x4;
+            | 3 ->
               field_transactions := (
                 (
                   read__1
                 ) p lb
               );
-              bits0 := !bits0 lor 0x4;
-            | 3 ->
+              bits0 := !bits0 lor 0x8;
+            | 4 ->
               field_timestamp := (
                 (
                   Ag_oj_run.read_int
                 ) p lb
               );
-              bits0 := !bits0 lor 0x8;
-            | 4 ->
+              bits0 := !bits0 lor 0x10;
+            | 5 ->
               field_hash := (
                 (
                   Ag_oj_run.read_string
                 ) p lb
               );
-              bits0 := !bits0 lor 0x10;
+              bits0 := !bits0 lor 0x20;
             | _ -> (
                 Yojson.Safe.skip_json p lb
               )
@@ -912,9 +953,10 @@ let read_block_json = (
       done;
       assert false;
     with Yojson.End_of_object -> (
-        if !bits0 <> 0x1f then Ag_oj_run.missing_fields p [| !bits0 |] [| "id"; "prev_hash"; "transactions"; "timestamp"; "hash" |];
+        if !bits0 <> 0x3f then Ag_oj_run.missing_fields p [| !bits0 |] [| "version"; "id"; "prev_hash"; "transactions"; "timestamp"; "hash" |];
         (
           {
+            version = !field_version;
             id = !field_id;
             prev_hash = !field_prev_hash;
             transactions = !field_transactions;

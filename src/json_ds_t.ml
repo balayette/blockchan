@@ -18,6 +18,7 @@ type transaction_json = {
 }
 
 type block_json = {
+  version: int;
   id: int;
   prev_hash: string;
   transactions: transaction_json list;

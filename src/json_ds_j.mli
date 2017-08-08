@@ -18,6 +18,7 @@ type transaction_json = Json_ds_t.transaction_json = {
 }
 
 type block_json = Json_ds_t.block_json = {
+  version: int;
   id: int;
   prev_hash: string;
   transactions: transaction_json list;
