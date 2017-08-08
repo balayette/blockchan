@@ -49,6 +49,9 @@ val get_text : t -> string
 (** Get the thread_hash **)
 val get_thread_hash : t -> string
 
+(** Get the timestamp **)
+val get_timestamp : t -> int
+
 (** Convert a Json_ds_t.transaction_data_json to a transaction_data **)
 val transaction_data_of_json_ds : Json_ds_t.transaction_data_json -> t option
 

@@ -7,7 +7,8 @@ type transaction_data_json = Json_ds_t.transaction_data_json = {
   username: string;
   thread_name: string;
   text: string;
-  thread_hash: string
+  thread_hash: string;
+  timestamp: int
 }
 
 type transaction_json = Json_ds_t.transaction_json = {
@@ -87,6 +88,15 @@ let write_transaction_data_json : _ -> transaction_data_json -> _ = (
       Yojson.Safe.write_string
     )
       ob x.thread_hash;
+    if !is_first then
+      is_first := false
+    else
+      Bi_outbuf.add_char ob ',';
+    Bi_outbuf.add_string ob "\"timestamp\":";
+    (
+      Yojson.Safe.write_int
+    )
+      ob x.timestamp;
     Bi_outbuf.add_char ob '}';
 )
 let string_of_transaction_data_json ?(len = 1024) x =
@@ -103,6 +113,7 @@ let read_transaction_data_json = (
     let field_thread_name = ref (Obj.magic (Sys.opaque_identity 0.0)) in
     let field_text = ref (Obj.magic (Sys.opaque_identity 0.0)) in
     let field_thread_hash = ref (Obj.magic (Sys.opaque_identity 0.0)) in
+    let field_timestamp = ref (Obj.magic (Sys.opaque_identity 0.0)) in
     let bits0 = ref 0 in
     try
       Yojson.Safe.read_space p lb;
@@ -146,6 +157,14 @@ let read_transaction_data_json = (
             | 8 -> (
                 if String.unsafe_get s pos = 'u' && String.unsafe_get s (pos+1) = 's' && String.unsafe_get s (pos+2) = 'e' && String.unsafe_get s (pos+3) = 'r' && String.unsafe_get s (pos+4) = 'n' && String.unsafe_get s (pos+5) = 'a' && String.unsafe_get s (pos+6) = 'm' && String.unsafe_get s (pos+7) = 'e' then (
                   2
+                )
+                else (
+                  -1
+                )
+              )
+            | 9 -> (
+                if String.unsafe_get s pos = 't' && String.unsafe_get s (pos+1) = 'i' && String.unsafe_get s (pos+2) = 'm' && String.unsafe_get s (pos+3) = 'e' && String.unsafe_get s (pos+4) = 's' && String.unsafe_get s (pos+5) = 't' && String.unsafe_get s (pos+6) = 'a' && String.unsafe_get s (pos+7) = 'm' && String.unsafe_get s (pos+8) = 'p' then (
+                  6
                 )
                 else (
                   -1
@@ -228,6 +247,13 @@ let read_transaction_data_json = (
               ) p lb
             );
             bits0 := !bits0 lor 0x20;
+          | 6 ->
+            field_timestamp := (
+              (
+                Ag_oj_run.read_int
+              ) p lb
+            );
+            bits0 := !bits0 lor 0x40;
           | _ -> (
               Yojson.Safe.skip_json p lb
             )
@@ -274,6 +300,14 @@ let read_transaction_data_json = (
               | 8 -> (
                   if String.unsafe_get s pos = 'u' && String.unsafe_get s (pos+1) = 's' && String.unsafe_get s (pos+2) = 'e' && String.unsafe_get s (pos+3) = 'r' && String.unsafe_get s (pos+4) = 'n' && String.unsafe_get s (pos+5) = 'a' && String.unsafe_get s (pos+6) = 'm' && String.unsafe_get s (pos+7) = 'e' then (
                     2
+                  )
+                  else (
+                    -1
+                  )
+                )
+              | 9 -> (
+                  if String.unsafe_get s pos = 't' && String.unsafe_get s (pos+1) = 'i' && String.unsafe_get s (pos+2) = 'm' && String.unsafe_get s (pos+3) = 'e' && String.unsafe_get s (pos+4) = 's' && String.unsafe_get s (pos+5) = 't' && String.unsafe_get s (pos+6) = 'a' && String.unsafe_get s (pos+7) = 'm' && String.unsafe_get s (pos+8) = 'p' then (
+                    6
                   )
                   else (
                     -1
@@ -356,6 +390,13 @@ let read_transaction_data_json = (
                 ) p lb
               );
               bits0 := !bits0 lor 0x20;
+            | 6 ->
+              field_timestamp := (
+                (
+                  Ag_oj_run.read_int
+                ) p lb
+              );
+              bits0 := !bits0 lor 0x40;
             | _ -> (
                 Yojson.Safe.skip_json p lb
               )
@@ -363,7 +404,7 @@ let read_transaction_data_json = (
       done;
       assert false;
     with Yojson.End_of_object -> (
-        if !bits0 <> 0x3f then Ag_oj_run.missing_fields p [| !bits0 |] [| "board"; "kind"; "username"; "thread_name"; "text"; "thread_hash" |];
+        if !bits0 <> 0x7f then Ag_oj_run.missing_fields p [| !bits0 |] [| "board"; "kind"; "username"; "thread_name"; "text"; "thread_hash"; "timestamp" |];
         (
           {
             board = !field_board;
@@ -372,6 +413,7 @@ let read_transaction_data_json = (
             thread_name = !field_thread_name;
             text = !field_text;
             thread_hash = !field_thread_hash;
+            timestamp = !field_timestamp;
           }
          : transaction_data_json)
       )

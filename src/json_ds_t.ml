@@ -7,7 +7,8 @@ type transaction_data_json = {
   username: string;
   thread_name: string;
   text: string;
-  thread_hash: string
+  thread_hash: string;
+  timestamp: int
 }
 
 type transaction_json = {

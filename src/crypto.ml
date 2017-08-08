@@ -20,3 +20,16 @@ let block_hash timestamp hashes id =
     | e::l -> concat_hashes l (acc ^  e)
     | [] -> acc
    in (string_of_int timestamp) ^ (concat_hashes hashes "") ^ (string_of_int id) |> hash_data
+
+
+let thread_hash data =
+  let open Transaction_data in
+  let board = (get_board t_data) |> string_of_board
+  and username = get_username t_data
+  and thread_name = get_thread_name t_data
+  and text = get_text t_data
+  and timestamp = get_timestamp t_data in
+  String.concat board [username;
+                       thread_name;
+                       text;
+                       timestamp;] |> hash_data

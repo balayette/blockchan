@@ -5,6 +5,7 @@ type transaction_data_json = {
      thread_name : string;
      text : string;
      thread_hash : string;
+     timestamp: int;
 }
 
 type transaction_json = {

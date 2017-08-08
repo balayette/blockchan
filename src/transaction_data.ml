@@ -1,4 +1,4 @@
-type transaction_type =
+ype transaction_type =
   | NEW_THREAD
   | REPLY
   | ARCHIVE
@@ -32,6 +32,7 @@ type t =
        - thread_hash : the hash of the thread that will be archived
     *)
     thread_hash : string;
+    timestamp : int;
   }
 
 let get_board t = t.board
@@ -46,6 +47,8 @@ let get_text t = t.text
 
 let get_thread_hash t = t.thread_hash
 
+let get_timestamp t = t.timestamp
+
 let new_transaction_data
     ?(username="Anonymous")
     ?(thread_name="")
@@ -53,7 +56,7 @@ let new_transaction_data
     ?(thread_hash="")
     board
     kind =
-  {board; kind; username; thread_name; text; thread_hash}
+  {board; kind; username; thread_name; text; thread_hash; timestamp = (int_of_float (Unix.time ()))}
 
 let string_of_board = function
   | CONSUMER_TECH -> "cg"
