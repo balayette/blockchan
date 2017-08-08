@@ -1,0 +1,106 @@
+DISCLAIMER :
+The development of this project is chaotic.
+
+There are a few (very) bad code paths in the project (performance-wise),
+that I am aware of. Most of the time, those code paths were left unchecked not
+by laziness but by choosing the most naive implementations to ease development
+and readability.
+Should performance issues arise, I will be the first to consider rewriting such
+hot paths.
+
+OCaml experts, be warned : I am merely a beginner and started this project as a
+learning experience. You are very likely to see code that you won't be able to
+unsee.
+
+
+BASIC OVERVIEW :
+
+.blockchan_data/
+---> blockchan.json [0]
+---> blocks/ [1]
+---> ---> 0.json [2]
+---> ---> 1.json
+---> ---> 2.json
+---> ---> ...
+---> ---> x.json
+---> blockchan [3]
+---> ---> boards/ [4]
+---> ---> ---> g/ [5]
+---> ---> ---> ---> thread_hash_1/ [6]
+---> ---> ---> ---> ---> 0 [7]
+---> ---> ---> ---> ---> 1
+---> ---> ---> ---> ---> ...
+---> ---> ---> ---> ---> x
+---> ---> ---> ---> thread_hash_2/
+---> ---> ---> ---> ...
+---> ---> ---> ---> thread_hash_x/
+---> ---> ---> cg/
+---> ---> ---> ...
+---> ---> ---> b/
+
+[0] : blockchain.json is a very simple json file that stores little
+metadata about the blockchain. (See I).
+
+[1] : blocks/ is a subdirectory of .blockchan_data/ where all the blocks
+are stored. (See II).
+
+[2] : Each [number].json file written to the disk represents the block with
+ID [number] (See III).
+
+[3] Directory that stores the imageboard in a human readable / easily parsed
+format
+
+[4] Home of the boards
+
+[5] Each board gets a folder, that is completely independant from the others.
+
+[6] Each subdirectory of each board directory is a thread. The directory name
+is the hash of thread.
+
+[7] There is no board wide post id. All posts are stored as plain text files in
+their thread's directory, indexed by time, starting from 0.
+
+I) blockchain.json
+
+I aim to keep this file as simple as possible. At the moment, the file only
+lists the number of blocks and the timestamp the blockchain was last updated.
+
+II) The blockchain
+blocks/ is the local storage of the blockchain. All blocks are stored and
+downloaded in json format, starting with the genesis block (ID 0).
+
+This allows for easy block lookup.
+
+Each block is stored as a json file that encodes the data associated with
+the block.
+Blocks are created at regular intervals if transactions have been made.
+
+Each block contains a version numnber, an id, the hash of the previous block,
+a list of transactions, the timestamp of the creation of the block and the hash
+of the block.
+
+A transaction is a data structure that contains the timestamp of its creation,
+its hash and associated data.
+
+The transaction data is what specifies the outcome of the transaction.
+
+
+III) The server
+
+The server listens for requests on a set of URIs.
+
+- GET /get?id=x -> The server will respond with a list of
+blocks (10 at a time max), starting from id (x + 1). If the list is empty,
+x is the id of the latest block on this server.
+
+- POST /transaction {transaction=x} -> The server will process the json encoded
+transaction x and add it to the next block, if it is valid.
+
+Other URIs and methods will be ignored.
+
+
+IV) The client
+
+The client periodically sends a request to the server to retrieve the latest
+blocks, and then processes them and writes them to the filesystem.
+That's all.

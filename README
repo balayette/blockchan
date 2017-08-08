@@ -1,0 +1,28 @@
+A blockchain-based anonymous imageboard, written in OCaml.
+
+This project aims to provide a simple imageboard.
+It will remain as simple as possible, and as extendable as possible.
+Blockchan tries not to lock up its users.
+
+I) The Philosophy
+KISS.
+
+II) The client
+
+The client is only expected to retrieve blocks from a server, save them to
+the filesystem and propagate the outcomes of the transactions.
+Displaying the data in an interface other than the filesystem is not a task
+of the client.
+It is up to the user to browse the filesystem using a text editor of their
+choosing, or any other program.
+The client is not expected to send data to the server directly, this is another
+program's job. (Ideally, one would transmit data to the server via cURL)
+
+III) The server
+
+The server's only task is to receive requests from client and process them.
+The server is also the central authority that is responsible of keeping track of
+the blockchain. It has to be trustworthy.
+Should it fail to appear so, one can, and should, start a server of his own
+using his local copy of the blockchain and start advertising this fork of the
+imageboard for everyone to use.
