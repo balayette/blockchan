@@ -15,7 +15,7 @@ unsee.
 
 BASIC OVERVIEW :
 
-.blockchan_data/
+blockchan_data/
 ---> blockchan.json [0]
 ---> blocks/ [1]
 ---> ---> 0.json [2]
@@ -41,7 +41,7 @@ BASIC OVERVIEW :
 [0] : blockchain.json is a very simple json file that stores little
 metadata about the blockchain. (See I).
 
-[1] : blocks/ is a subdirectory of .blockchan_data/ where all the blocks
+[1] : blocks/ is a subdirectory of blockchan_data/ where all the blocks
 are stored. (See II).
 
 [2] : Each [number].json file written to the disk represents the block with
