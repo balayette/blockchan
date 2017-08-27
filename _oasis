@@ -16,6 +16,6 @@ Executable "server"
 
 Executable "client"
     Path: src/
-    MainIs: client.ml
+    MainIs: cli.ml
     CompiledObject: best
     BuildDepends: digestif.ocaml, yojson, core, threads, atdgen, cohttp-lwt-unix, lwt
