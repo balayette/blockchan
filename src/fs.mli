@@ -5,4 +5,4 @@ exception Directory_exists of string
 exception Directory_creation_failed of string
 
 (** Create a blockchan_data directory at the specified path **)
-val init_fs_exn : string -> bool
+val init_fs_exn : string -> string -> unit

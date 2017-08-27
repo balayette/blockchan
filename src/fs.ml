@@ -4,9 +4,13 @@ exception Directory_exists of string
 (** Could not create the directory **)
 exception Directory_creation_failed of string
 
-let init_fs_exn path =
+let create_dir path =
+  Printf.printf "Creating directory %s\n" path;
+  Unix.mkdir path 0o755;
+  print_string "Directory created\n"
+
+let init_fs_exn path ip =
   try
-    let path = path ^ "/blockchan_data" in
     if Sys.is_directory path then (
       raise (Directory_exists path)
     )
@@ -15,5 +19,15 @@ let init_fs_exn path =
     )
   with
     Sys_error _ -> (
-      print_string "Creating the directory"
+      create_dir path;
+      Printf.printf "Creating %s/server\n" path;
+      Core.Out_channel.write_lines (path ^ "/server") [ip];
+      print_string "Created\n";
+      create_dir (path ^ "/blocks");
+      create_dir (path ^ "/blockchan");
+      create_dir (path ^ "/blockchan/boards");
+      create_dir (path ^ "/blockchan/boards/g");
+      create_dir (path ^ "/blockchan/boards/cg");
+      create_dir (path ^ "/blockchan/boards/b");
     )
+
