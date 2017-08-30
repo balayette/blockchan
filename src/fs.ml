@@ -4,6 +4,9 @@ exception Directory_exists of string
 (** Could not create the directory **)
 exception Directory_creation_failed of string
 
+(** Could not post the reply because the thread doesn't exist **)
+exception Reply_post_failed of string
+
 let create_dir path =
   Printf.printf "Creating directory %s\n" path;
   Unix.mkdir path 0o755;
@@ -31,17 +34,65 @@ let init_fs_exn path ip =
       create_dir (path ^ "/blockchan/boards/b");
     )
 
-let propagate_transaction path transaction = 
-  let open Transaction_data in
-  let open Transaction in
-  let tdata = data transaction in
-  match get_kind tdata with
-  | NEW_THREAD -> prop_thread path (hash ) 
-  | REPLY
-  | ARCHIVE
+let write_reply_count path count = 
+  Core.Out_channel.write_all (path ^ "/count") (string_of_int count)
 
-let prop_thread path board thash title username text = 
-  let open Transaction_data in 
-  let b = string_of_board board in
+let write_reply path index timestamp username text = 
+  Core.Out_channel.write_lines (path ^ "/" ^ (string_of_int index)) [string_of_int timestamp; username; text];
+  write_reply_count path index
+
+
+
+
+let prop_thread path board thash title username text timestamp = 
+  let b = Transaction_data.string_of_board board in
   Printf.printf "Creating a new thread with hash : %s" thash;
-  create_dir 
+  let complete_path = Printf.sprintf "%s/blockchan/boards/%s/%s/" path b thash in
+  create_dir complete_path;
+  Core.Out_channel.write_lines (complete_path ^ "/title") [title];
+  write_reply complete_path 0 timestamp username text
+
+let get_reply_count path = 
+  Core.In_channel.read_all (path ^ "/count") |> String.trim |> int_of_string;;
+
+
+let prop_reply path board thash username text timestamp = 
+  let b = Transaction_data.string_of_board board in
+  let complete_path = Printf.sprintf "%s/blockchan/boards/%s/%s/" path b thash in
+  try (
+    if Sys.is_directory complete_path then (
+      Printf.printf "Writing the reply to %s" complete_path;
+      let index = (get_reply_count complete_path) + 1 in
+      write_reply complete_path index timestamp username text;
+    )
+    else (
+      raise (Reply_post_failed (Printf.sprintf "Path : %s" complete_path))
+    )
+  )
+  with
+    Sys_error _ -> (
+      raise (Reply_post_failed (Printf.sprintf "Path : %s" complete_path))
+    )
+
+
+let propagate_transaction path transaction = 
+  let td = Transaction.get_data transaction in
+  let thash = Transaction_data.get_thread_hash td
+  and title = Transaction_data.get_thread_name td 
+  and username = Transaction_data.get_username td 
+  and text = Transaction_data.get_text td
+  and timestamp = Transaction_data.get_timestamp td 
+  and board = Transaction_data.get_board td 
+  and kind = Transaction_data.get_kind td in
+  match kind with
+  | Transaction_data.NEW_THREAD -> prop_thread path board (Crypto.thread_hash td) title username text timestamp
+  | Transaction_data.REPLY -> prop_reply path board thash username text timestamp
+  | Transaction_data.ARCHIVE -> () 
+   
+
+let write_block path b = 
+  let rec aux trs = match trs with 
+  | [] -> ()
+  | e::l -> propagate_transaction path e; aux l;
+  in aux (Block.get_transactions b)
+
