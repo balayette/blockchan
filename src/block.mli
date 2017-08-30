@@ -29,7 +29,7 @@ val print_block : t -> unit
 val get_hash : t -> string
 
 (** Convert a Json_ds_t.block_json to a block **)
-val block_of_json_ds : Json_ds_t.block_json -> t
+(* val block_of_json_ds : Json_ds_t.block_json -> t *)
 
-(** Convert a block to a Json_ds_t.block **)
-val json_ds_of_block : t -> Json_ds_t.block_json
+(* (** Convert a block to a Json_ds_t.block **) *)
+(* val json_ds_of_block : t -> Json_ds_t.block_json *)

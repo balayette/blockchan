@@ -5,4 +5,4 @@ val transaction_hash : Transaction_data.t -> string
 val block_hash : int -> string list -> int -> string
 
 (** Thread hash **)
-val thread_hash : string -> string -> string -> string -> string
+val thread_hash : Transaction_data.t -> string

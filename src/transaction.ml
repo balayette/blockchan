@@ -16,9 +16,11 @@ let new_transaction data =
   let hash = Crypto.transaction_hash data in
   create_transaction data hash (int_of_float (Unix.time ()))
 
-let hash tr = tr.hash
+let get_hash tr = tr.hash
 
-let data tr = tr.data
+let get_data tr = tr.data
+
+let get_timestamp tr = tr.timestamp
 
 let transaction_of_json_ds tj =
   let open Json_ds_t in
@@ -27,9 +29,9 @@ let transaction_of_json_ds tj =
   | None -> None
   | Some x -> Some (create_transaction x tj.hash tj.timestamp)
 
-let json_ds_of_transaction (tr : t) =
+let json_ds_of_transaction tr =
   let open Json_ds_t in
-  {data = (Transaction_data.json_ds_of_transaction_data tr.data);
-   hash = tr.hash;
-   timestamp = tr.timestamp
+  {data = (Transaction_data.json_ds_of_transaction_data (get_data tr));
+   hash = (get_hash tr);
+   timestamp = (get_timestamp tr)
   }

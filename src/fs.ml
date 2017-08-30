@@ -31,3 +31,17 @@ let init_fs_exn path ip =
       create_dir (path ^ "/blockchan/boards/b");
     )
 
+let propagate_transaction path transaction = 
+  let open Transaction_data in
+  let open Transaction in
+  let tdata = data transaction in
+  match get_kind tdata with
+  | NEW_THREAD -> prop_thread path (hash ) 
+  | REPLY
+  | ARCHIVE
+
+let prop_thread path board thash title username text = 
+  let open Transaction_data in 
+  let b = string_of_board board in
+  Printf.printf "Creating a new thread with hash : %s" thash;
+  create_dir 

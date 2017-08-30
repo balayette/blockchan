@@ -2,3 +2,5 @@ _build/
 *.native
 setup.data
 setup.log
+**/*.swp
+**/blockchan_data/

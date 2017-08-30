@@ -7,14 +7,18 @@ val new_transaction : Transaction_data.t -> t
 (** Print the transaction to stdout **)
 val print_transaction : t -> unit
 
-(** Get the hash **)
-val hash : t -> string
+(** Get he hash **)
+val get_hash : t -> string
 
 (** Get the data **)
-val data : t -> Transaction_data.t
+val get_data : t -> Transaction_data.t
 
-(** Convert a Json_ds_t.transaction_json to a transaction **)
+(** Get the timestamp **)
+val get_timestamp : t -> int
+
+(** convert a json_ds_t.transaction_json to a transaction **)
 val transaction_of_json_ds : Json_ds_t.transaction_json -> t option
 
-(** Convert a transaction into a Json_ds_t.transaction_json **)
+(** convert a transaction into a json_ds_t.transaction_json **)
 val json_ds_of_transaction : t -> Json_ds_t.transaction_json
+

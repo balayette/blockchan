@@ -1,4 +1,4 @@
-ype transaction_type =
+type transaction_type =
   | NEW_THREAD
   | REPLY
   | ARCHIVE
@@ -104,12 +104,21 @@ let transaction_data_of_json_ds ds =
                             bo
                             ki)
 
-let json_ds_of_transaction_data (td : t) =
+let json_ds_of_transaction_data td =
+  let b = string_of_board td.board 
+  and k = string_of_transaction_type td.kind 
+  and u = td.username 
+  and tn = td.thread_name 
+  and t = td.text 
+  and ts = td.timestamp
+  and th = td.thread_hash
+  in 
   let open Json_ds_t in
-  { board = (string_of_board td.board);
-    kind = (string_of_transaction_type td.kind);
-    username = td.username;
-    thread_name = td.thread_name;
-    text = td.text;
-    thread_hash = td.thread_hash
+  { board = b;
+    kind = k;
+    username = u;
+    thread_name = tn;
+    text = t;
+    thread_hash = th;
+    timestamp = ts; 
   }
