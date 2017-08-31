@@ -57,6 +57,7 @@ let get_reply_count path =
 
 
 let prop_reply path board thash username text timestamp = 
+  Printf.printf "Creating a new reply\n";
   let b = Transaction_data.string_of_board board in
   let complete_path = Printf.sprintf "%s/blockchan/boards/%s/%s/" path b thash in
   try (
@@ -99,4 +100,22 @@ let write_block path b =
   apply_transactions path (Block.get_transactions b); 
   let jds = Block.json_ds_of_block b in 
   let str = Json_ds_j.string_of_block_json jds in
-  Core.Out_channel.write_all (Printf.sprintf "%s/blocks/%d.json" path (Block.get_id b)) str;
+  Core.Out_channel.write_all (Printf.sprintf "%s/blocks/%d.json" path (Block.get_id b)) str
+
+let write_all_blocks path = 
+  let complete_path = path ^ "/blocks/" in
+  let rec aux count = 
+    let p = Printf.sprintf "%s/%d.json" complete_path count in
+    if Sys.file_exists p then (
+      let content = Core.In_channel.read_all p in
+      let jds = Json_ds_j.block_json_of_string content in
+      let block = Block.block_of_json_ds jds in
+      let trs = Block.get_transactions block in
+      Printf.printf "%d" (List.length trs); 
+      apply_transactions path trs;
+      aux (count + 1)
+    )
+    else (
+      Printf.printf "Block with id %d doesn't exist\n%s" count p;
+    )
+  in aux 0

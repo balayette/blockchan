@@ -14,7 +14,7 @@ type boards =
 type t
 
 (** Create a new transaction **)
-val new_transaction_data : ?username:string -> ?thread_name:string -> ?text:string -> ?thread_hash:string ->boards -> transaction_type ->  t
+val new_transaction_data : ?username:string -> ?thread_name:string -> ?text:string -> ?thread_hash:string -> ?timestamp:int -> boards -> transaction_type ->  t
 
 (** Convert a 'boards' into its string representation**)
 val string_of_board : boards -> string

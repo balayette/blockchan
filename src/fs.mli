@@ -13,3 +13,6 @@ val propagate_transaction : string -> Transaction.t -> unit
 (** Writes a raw block to the blocks/ directory and propagates all 
  * the transactions it contains **)
 val write_block : string -> Block.t -> unit
+
+(** Writes all the blocks stored in the filesystem to the blockchann directory **)
+val write_all_blocks : string -> unit

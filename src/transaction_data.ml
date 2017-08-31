@@ -54,9 +54,10 @@ let new_transaction_data
     ?(thread_name="")
     ?(text="I forgot to type a text and should be killed.")
     ?(thread_hash="")
+    ?(timestamp=(int_of_float (Unix.time ())))
     board
     kind =
-  {board; kind; username; thread_name; text; thread_hash; timestamp = (int_of_float (Unix.time ()))}
+      {board; kind; username; thread_name; text; thread_hash; timestamp}
 
 let string_of_board = function
   | CONSUMER_TECH -> "cg"
@@ -76,7 +77,7 @@ let transaction_type_of_string = function
   | _ -> None
 
 let string_of_transaction_type = function
-  | NEW_THREAD -> "NEW THREAD"
+  | NEW_THREAD -> "NEW_THREAD"
   | REPLY -> "REPLY"
   | ARCHIVE -> "ARCHIVE"
 
@@ -101,6 +102,7 @@ let transaction_data_of_json_ds ds =
                             ~thread_name:ds.thread_name
                             ~text:ds.text
                             ~thread_hash:ds.thread_hash
+                            ~timestamp:ds.timestamp
                             bo
                             ki)
 

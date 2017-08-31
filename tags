@@ -49,7 +49,6 @@ acblc	src/main.ml	/^  let acblc = Blockchain.blockchain_of_json_ds blc in$/;"	v
 add_block	src/blockchain.ml	/^let add_block bl b =$/;"	v
 add_block	src/blockchain.mli	/^val add_block : t -> Block.t -> t option$/;"	v
 apply_transactions	src/fs.ml	/^let rec apply_transactions path trs = $/;"	v
-b	src/serv.ml	/^    let b = Block.new_block g [tra; tra2] in$/;"	v
 blc	src/main.ml	/^  let blc = Json_ds_j.blockchain_json_of_string str in$/;"	v
 block_hash	src/block.ml	/^let block_hash timestamp transactions id =$/;"	v
 block_hash	src/block.mli	/^val block_hash : int -> Transaction.t list -> int -> string$/;"	v
@@ -89,7 +88,6 @@ create_transaction	src/transaction.ml	/^let create_transaction data hash timesta
 data	src/json_ds_t.ml	/^  data: transaction_data_json;$/;"	r	type:transaction_json
 data	src/json_ds_t.mli	/^  data: transaction_data_json;$/;"	r	type:transaction_json
 data	src/transaction.ml	/^  { data : Transaction_data.t;$/;"	r	type:t
-g	src/serv.ml	/^    let g = Block.genesis_block () in$/;"	v
 genesis_block	src/block.ml	/^let genesis_block () =$/;"	v
 genesis_block	src/block.mli	/^val genesis_block : unit -> t$/;"	v
 get_blocks	src/blockchain.ml	/^let get_blocks bl = bl.blocks$/;"	v
@@ -161,7 +159,7 @@ new_blockchain	src/blockchain.mli	/^val new_blockchain  : unit -> t$/;"	v
 new_transaction	src/transaction.ml	/^let new_transaction data =$/;"	v
 new_transaction	src/transaction.mli	/^val new_transaction : Transaction_data.t -> t$/;"	v
 new_transaction_data	src/transaction_data.ml	/^let new_transaction_data$/;"	v
-new_transaction_data	src/transaction_data.mli	/^val new_transaction_data : ?username:string -> ?thread_name:string -> ?text:string -> ?thread_hash:string ->boards -> transaction_type ->  t$/;"	v
+new_transaction_data	src/transaction_data.mli	/^val new_transaction_data : ?username:string -> ?thread_name:string -> ?text:string -> ?thread_hash:string -> ?timestamp:int -> boards -> transaction_type ->  t$/;"	v
 path_of_server_command	src/serv.ml	/^let path_of_server_command = function$/;"	v
 prev_hash	src/block.ml	/^    prev_hash : string;$/;"	r	type:t
 prev_hash	src/json_ds_t.ml	/^  prev_hash: string;$/;"	r	type:block_json
@@ -212,12 +210,9 @@ t	src/transaction.ml	/^type t =$/;"	t
 t	src/transaction.mli	/^type t$/;"	t
 t	src/transaction_data.ml	/^type t =$/;"	t
 t	src/transaction_data.mli	/^type t$/;"	t
-td	src/serv.ml	/^  let td = Transaction_data.new_transaction_data $/;"	v
-td2	src/serv.ml	/^    let td2 = Transaction_data.new_transaction_data$/;"	v
 text	src/json_ds_t.ml	/^  text: string;$/;"	r	type:transaction_data_json
 text	src/json_ds_t.mli	/^  text: string;$/;"	r	type:transaction_data_json
 text	src/transaction_data.ml	/^    text : string;$/;"	r	type:t
-thash	src/serv.ml	/^    let thash = Crypto.thread_hash td in$/;"	v
 thread_hash	src/crypto.ml	/^let thread_hash t_data =$/;"	v
 thread_hash	src/crypto.mli	/^val thread_hash : Transaction_data.t -> string$/;"	v
 thread_hash	src/json_ds_t.ml	/^  thread_hash: string;$/;"	r	type:transaction_data_json
@@ -235,8 +230,6 @@ timestamp	src/json_ds_t.mli	/^  timestamp: int$/;"	r	type:transaction_json
 timestamp	src/json_ds_t.mli	/^  timestamp: int;$/;"	r	type:block_json
 timestamp	src/transaction.ml	/^    timestamp : int;$/;"	r	type:t
 timestamp	src/transaction_data.ml	/^    timestamp : int;$/;"	r	type:t
-tra	src/serv.ml	/^    let tra = Transaction.new_transaction td in$/;"	v
-tra2	src/serv.ml	/^    let tra2 = Transaction.new_transaction td2 in$/;"	v
 transaction_data_json	src/json_ds_j.ml	/^type transaction_data_json = Json_ds_t.transaction_data_json = {$/;"	t
 transaction_data_json	src/json_ds_j.mli	/^type transaction_data_json = Json_ds_t.transaction_data_json = {$/;"	t
 transaction_data_json	src/json_ds_t.ml	/^type transaction_data_json = {$/;"	t
@@ -270,6 +263,8 @@ version	src/json_ds_t.ml	/^  version: int;$/;"	r	type:block_json
 version	src/json_ds_t.mli	/^  version: int;$/;"	r	type:block_json
 write__1	src/json_ds_j.ml	/^let write__1 = ($/;"	v
 write__2	src/json_ds_j.ml	/^let write__2 = ($/;"	v
+write_all_blocks	src/fs.ml	/^let write_all_blocks path = $/;"	v
+write_all_blocks	src/fs.mli	/^val write_all_blocks : string -> unit$/;"	v
 write_block	src/fs.ml	/^let write_block path b = $/;"	v
 write_block	src/fs.mli	/^val write_block : string -> Block.t -> unit$/;"	v
 write_block_json	src/json_ds_j.ml	/^let write_block_json : _ -> block_json -> _ = ($/;"	v
