@@ -78,6 +78,8 @@ board_of_string	src/transaction_data.ml	/^let board_of_string = function$/;"	v
 board_of_string	src/transaction_data.mli	/^val board_of_string : string -> boards option$/;"	v
 boards	src/transaction_data.ml	/^type boards =$/;"	t
 boards	src/transaction_data.mli	/^type boards =$/;"	t
+check_blockchain	src/fs.mli	/^val check_blockchain : string -> bool$/;"	v
+check_individual_blocks	src/fs.mli	/^val check_individual_blocks : string -> bool$/;"	v
 count	src/blockchain.ml	/^  { count : int;$/;"	r	type:t
 count	src/json_ds_t.ml	/^type blockchain_json = { count: int; blocks: block_json list }$/;"	r	type:blockchain_json
 count	src/json_ds_t.mli	/^type blockchain_json = { count: int; blocks: block_json list }$/;"	r	type:blockchain_json
@@ -88,10 +90,16 @@ create_transaction	src/transaction.ml	/^let create_transaction data hash timesta
 data	src/json_ds_t.ml	/^  data: transaction_data_json;$/;"	r	type:transaction_json
 data	src/json_ds_t.mli	/^  data: transaction_data_json;$/;"	r	type:transaction_json
 data	src/transaction.ml	/^  { data : Transaction_data.t;$/;"	r	type:t
+for_all_blocks	src/fs.ml	/^let for_all_blocks ?(low=0) ?(count=(-1)) path f = $/;"	v
+for_all_blocks	src/fs.mli	/^val for_all_blocks : ?low:int -> ?count:int -> string -> (Block.t -> bool) -> bool$/;"	v
 genesis_block	src/block.ml	/^let genesis_block () =$/;"	v
 genesis_block	src/block.mli	/^val genesis_block : unit -> t$/;"	v
 get_blocks	src/blockchain.ml	/^let get_blocks bl = bl.blocks$/;"	v
 get_blocks	src/blockchain.mli	/^val get_blocks : t -> Block.t list$/;"	v
+get_blocks	src/fs.ml	/^let get_blocks ?(low=0) ?(count=(-1)) path = $/;"	v
+get_blocks	src/fs.mli	/^val get_blocks : ?low:int -> ?count:int -> string -> Block.t list$/;"	v
+get_blocks'	src/fs.ml	/^let get_blocks' ?(low=0) ?(count=(-1)) path = $/;"	v
+get_blocks'	src/fs.mli	/^val get_blocks' : ?low:int -> ?count:int -> string -> Block.t list$/;"	v
 get_board	src/transaction_data.ml	/^let get_board t = t.board$/;"	v
 get_board	src/transaction_data.mli	/^val get_board : t -> boards$/;"	v
 get_count	src/blockchain.ml	/^let get_count bl = bl.count$/;"	v
@@ -142,6 +150,8 @@ id	src/json_ds_t.ml	/^  id: int;$/;"	r	type:block_json
 id	src/json_ds_t.mli	/^  id: int;$/;"	r	type:block_json
 init_fs_exn	src/fs.ml	/^let init_fs_exn path ip =$/;"	v
 init_fs_exn	src/fs.mli	/^val init_fs_exn : string -> string -> unit$/;"	v
+iter_blocks	src/fs.ml	/^let iter_blocks ?(low=0) ?(count=(-1)) path f = $/;"	v
+iter_blocks	src/fs.mli	/^val iter_blocks : ?low:int -> ?count:int -> string -> (Block.t -> unit) -> unit$/;"	v
 json_ds_of_block	src/block.ml	/^let json_ds_of_block bl =$/;"	v
 json_ds_of_block	src/block.mli	/^val json_ds_of_block : t -> Json_ds_t.block_json$/;"	v
 json_ds_of_transaction	src/transaction.ml	/^let json_ds_of_transaction tr =$/;"	v

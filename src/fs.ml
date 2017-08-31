@@ -102,20 +102,67 @@ let write_block path b =
   let str = Json_ds_j.string_of_block_json jds in
   Core.Out_channel.write_all (Printf.sprintf "%s/blocks/%d.json" path (Block.get_id b)) str
 
-let write_all_blocks path = 
-  let complete_path = path ^ "/blocks/" in
-  let rec aux count = 
-    let p = Printf.sprintf "%s/%d.json" complete_path count in
-    if Sys.file_exists p then (
+
+let iter_blocks ?(low=0) ?(count=(-1)) path f = 
+  let rec aux index count = 
+    let p = Printf.sprintf "%s/blocks/%d.json" path index in
+    if ((Sys.file_exists p) && (count = 0 || count <> 0)) then (
       let content = Core.In_channel.read_all p in
       let jds = Json_ds_j.block_json_of_string content in
       let block = Block.block_of_json_ds jds in
-      let trs = Block.get_transactions block in
-      Printf.printf "%d" (List.length trs); 
-      apply_transactions path trs;
-      aux (count + 1)
+      f block; 
+      aux (index + 1) (count - 1)
+    )
+  in aux low count
+
+let for_all_blocks ?(low=0) ?(count=(-1)) path f = 
+  let rec aux index count = 
+    let p = Printf.sprintf "%s/blocks/%d.json" path index in
+    if ((Sys.file_exists p) && (count = 0 || count <> 0)) then (
+      let content = Core.In_channel.read_all p in
+      let jds = Json_ds_j.block_json_of_string content in
+      let block = Block.block_of_json_ds jds in
+      f block && aux (index + 1) (count - 1)
     )
     else (
-      Printf.printf "Block with id %d doesn't exist\n%s" count p;
+      true
     )
-  in aux 0
+  in aux low count
+
+
+let get_blocks ?(low=0) ?(count=(-1)) path = 
+  let rec aux index count = 
+    let p = Printf.sprintf "%s/blocks/%d.json" path index in
+    if ((Sys.file_exists p) && (count = 0 || count <> 0)) then (
+      let content = Core.In_channel.read_all p in
+      let jds = Json_ds_j.block_json_of_string content in
+      let block = Block.block_of_json_ds jds in
+      block :: (aux (index + 1) (count - 1))
+    )
+    else (
+      []
+    )
+  in aux low count
+
+let get_blocks' ?(low=0) ?(count=(-1)) path = 
+  let rec aux index count acc = 
+    let p = Printf.sprintf "%s/blocks/%d.json" path index in
+    if ((Sys.file_exists p) && (count = 0 || count <> 0)) then (
+      let content = Core.In_channel.read_all p in
+      let jds = Json_ds_j.block_json_of_string content in
+      let block = Block.block_of_json_ds jds in
+      aux (index + 1) (count - 1) (block :: acc)      
+    )
+    else (
+      acc
+    )
+  in aux low count [] |> List.rev
+
+let write_all_blocks path = 
+  iter_blocks path (fun b -> apply_transactions path (Block.get_transactions b))
+
+(* Not implemented *)
+let check_individual_blocks path = failwith "Not implemented"
+
+(* Not implemented *)
+let check_blockchain path = failwith "Not implemented"
