@@ -54,5 +54,6 @@ let () =
     let g = Block.genesis_block () in
     let b = Block.new_block g [tra; tra2] in
     Block.print_block b;
+    Fs.write_block "./blockchan_data/" g;
     Fs.write_block "./blockchan_data/" b; 
     

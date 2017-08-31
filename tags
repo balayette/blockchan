@@ -48,6 +48,7 @@ UNKNOWN	src/serv.ml	/^  | UNKNOWN$/;"	C	type:server_commands
 acblc	src/main.ml	/^  let acblc = Blockchain.blockchain_of_json_ds blc in$/;"	v
 add_block	src/blockchain.ml	/^let add_block bl b =$/;"	v
 add_block	src/blockchain.mli	/^val add_block : t -> Block.t -> t option$/;"	v
+apply_transactions	src/fs.ml	/^let rec apply_transactions path trs = $/;"	v
 b	src/serv.ml	/^    let b = Block.new_block g [tra; tra2] in$/;"	v
 blc	src/main.ml	/^  let blc = Json_ds_j.blockchain_json_of_string str in$/;"	v
 block_hash	src/block.ml	/^let block_hash timestamp transactions id =$/;"	v
@@ -61,6 +62,7 @@ block_json	src/json_ds_t.mli	/^type block_json = {$/;"	t
 block_json_of_string	src/json_ds_j.ml	/^let block_json_of_string s =$/;"	v
 block_json_of_string	src/json_ds_j.mli	/^val block_json_of_string :$/;"	v
 block_of_json_ds	src/block.ml	/^let block_of_json_ds bl =$/;"	v
+block_of_json_ds	src/block.mli	/^val block_of_json_ds : Json_ds_t.block_json -> t$/;"	v
 blockchain_json	src/json_ds_j.ml	/^type blockchain_json = Json_ds_t.blockchain_json = {$/;"	t
 blockchain_json	src/json_ds_j.mli	/^type blockchain_json = Json_ds_t.blockchain_json = {$/;"	t
 blockchain_json	src/json_ds_t.ml	/^type blockchain_json = { count: int; blocks: block_json list }$/;"	t
@@ -143,6 +145,7 @@ id	src/json_ds_t.mli	/^  id: int;$/;"	r	type:block_json
 init_fs_exn	src/fs.ml	/^let init_fs_exn path ip =$/;"	v
 init_fs_exn	src/fs.mli	/^val init_fs_exn : string -> string -> unit$/;"	v
 json_ds_of_block	src/block.ml	/^let json_ds_of_block bl =$/;"	v
+json_ds_of_block	src/block.mli	/^val json_ds_of_block : t -> Json_ds_t.block_json$/;"	v
 json_ds_of_transaction	src/transaction.ml	/^let json_ds_of_transaction tr =$/;"	v
 json_ds_of_transaction	src/transaction.mli	/^val json_ds_of_transaction : t -> Json_ds_t.transaction_json$/;"	v
 json_ds_of_transaction_data	src/transaction_data.ml	/^let json_ds_of_transaction_data td =$/;"	v

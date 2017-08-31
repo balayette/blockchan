@@ -90,9 +90,13 @@ let propagate_transaction path transaction =
   | Transaction_data.ARCHIVE -> () 
    
 
-let write_block path b = 
-  let rec aux trs = match trs with 
+let rec apply_transactions path trs = 
+  match trs with 
   | [] -> ()
-  | e::l -> propagate_transaction path e; aux l;
-  in aux (Block.get_transactions b)
+  | e::l -> propagate_transaction path e; apply_transactions path l
 
+let write_block path b = 
+  apply_transactions path (Block.get_transactions b); 
+  let jds = Block.json_ds_of_block b in 
+  let str = Json_ds_j.string_of_block_json jds in
+  Core.Out_channel.write_all (Printf.sprintf "%s/blocks/%d.json" path (Block.get_id b)) str;
