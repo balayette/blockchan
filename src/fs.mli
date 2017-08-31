@@ -10,5 +10,6 @@ val init_fs_exn : string -> string -> unit
 (** Propagates a transaction to the disk in readable form **)
 val propagate_transaction : string -> Transaction.t -> unit
 
-(** Propagates all the transactions of a block **)
+(** Writes a raw block to the blocks/ directory and propagates all 
+ * the transactions it contains **)
 val write_block : string -> Block.t -> unit
