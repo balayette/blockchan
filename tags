@@ -8,6 +8,7 @@ ARCHIVE	src/transaction_data.ml	/^  | ARCHIVE$/;"	C	type:transaction_type
 ARCHIVE	src/transaction_data.mli	/^  | ARCHIVE$/;"	C	type:transaction_type
 Block	src/block.ml	1;"	M
 Block	src/block.mli	1;"	M
+Block_doesnt_exist	src/fs.ml	/^exception Block_doesnt_exist of string$/;"	e
 Blockchain	src/blockchain.ml	1;"	M
 Blockchain	src/blockchain.mli	1;"	M
 CONSUMER_TECH	src/transaction_data.ml	/^  | CONSUMER_TECH$/;"	C	type:boards
@@ -48,7 +49,7 @@ UNKNOWN	src/serv.ml	/^  | UNKNOWN$/;"	C	type:server_commands
 acblc	src/main.ml	/^  let acblc = Blockchain.blockchain_of_json_ds blc in$/;"	v
 add_block	src/blockchain.ml	/^let add_block bl b =$/;"	v
 add_block	src/blockchain.mli	/^val add_block : t -> Block.t -> t option$/;"	v
-apply_transactions	src/fs.ml	/^let rec apply_transactions path trs = $/;"	v
+apply_transactions	src/fs.ml	/^let rec apply_transactions path trs =$/;"	v
 blc	src/main.ml	/^  let blc = Json_ds_j.blockchain_json_of_string str in$/;"	v
 block_hash	src/block.ml	/^let block_hash timestamp transactions id =$/;"	v
 block_hash	src/block.mli	/^val block_hash : int -> Transaction.t list -> int -> string$/;"	v
@@ -62,6 +63,7 @@ block_json_of_string	src/json_ds_j.ml	/^let block_json_of_string s =$/;"	v
 block_json_of_string	src/json_ds_j.mli	/^val block_json_of_string :$/;"	v
 block_of_json_ds	src/block.ml	/^let block_of_json_ds bl =$/;"	v
 block_of_json_ds	src/block.mli	/^val block_of_json_ds : Json_ds_t.block_json -> t$/;"	v
+block_of_string	src/block.mli	/^val block_of_string : string -> t$/;"	v
 blockchain_json	src/json_ds_j.ml	/^type blockchain_json = Json_ds_t.blockchain_json = {$/;"	t
 blockchain_json	src/json_ds_j.mli	/^type blockchain_json = Json_ds_t.blockchain_json = {$/;"	t
 blockchain_json	src/json_ds_t.ml	/^type blockchain_json = { count: int; blocks: block_json list }$/;"	t
@@ -78,7 +80,10 @@ board_of_string	src/transaction_data.ml	/^let board_of_string = function$/;"	v
 board_of_string	src/transaction_data.mli	/^val board_of_string : string -> boards option$/;"	v
 boards	src/transaction_data.ml	/^type boards =$/;"	t
 boards	src/transaction_data.mli	/^type boards =$/;"	t
+bs	src/serv.ml	/^  let bs = Fs.get_blocks_json ".\/blockchan_data" in$/;"	v
+check_blockchain	src/fs.ml	/^let check_blockchain path = failwith "Not implemented"$/;"	v
 check_blockchain	src/fs.mli	/^val check_blockchain : string -> bool$/;"	v
+check_individual_blocks	src/fs.ml	/^let check_individual_blocks path = failwith "Not implemented"$/;"	v
 check_individual_blocks	src/fs.mli	/^val check_individual_blocks : string -> bool$/;"	v
 count	src/blockchain.ml	/^  { count : int;$/;"	r	type:t
 count	src/json_ds_t.ml	/^type blockchain_json = { count: int; blocks: block_json list }$/;"	r	type:blockchain_json
@@ -90,16 +95,21 @@ create_transaction	src/transaction.ml	/^let create_transaction data hash timesta
 data	src/json_ds_t.ml	/^  data: transaction_data_json;$/;"	r	type:transaction_json
 data	src/json_ds_t.mli	/^  data: transaction_data_json;$/;"	r	type:transaction_json
 data	src/transaction.ml	/^  { data : Transaction_data.t;$/;"	r	type:t
-for_all_blocks	src/fs.ml	/^let for_all_blocks ?(low=0) ?(count=(-1)) path f = $/;"	v
+for_all_blocks	src/fs.ml	/^let for_all_blocks ?(low=0) ?(count=(-1)) path f =$/;"	v
 for_all_blocks	src/fs.mli	/^val for_all_blocks : ?low:int -> ?count:int -> string -> (Block.t -> bool) -> bool$/;"	v
 genesis_block	src/block.ml	/^let genesis_block () =$/;"	v
 genesis_block	src/block.mli	/^val genesis_block : unit -> t$/;"	v
+get_block	src/fs.ml	/^let get_block path id =$/;"	v
+get_block	src/fs.mli	/^val get_block : string -> int -> Block.t$/;"	v
+get_block_json	src/fs.ml	/^let get_block_json path id =$/;"	v
+get_block_json	src/fs.mli	/^val get_block_json : string -> int -> string option$/;"	v
 get_blocks	src/blockchain.ml	/^let get_blocks bl = bl.blocks$/;"	v
 get_blocks	src/blockchain.mli	/^val get_blocks : t -> Block.t list$/;"	v
-get_blocks	src/fs.ml	/^let get_blocks ?(low=0) ?(count=(-1)) path = $/;"	v
+get_blocks	src/fs.ml	/^let get_blocks ?(low=0) ?(count=(-1)) path =$/;"	v
 get_blocks	src/fs.mli	/^val get_blocks : ?low:int -> ?count:int -> string -> Block.t list$/;"	v
-get_blocks'	src/fs.ml	/^let get_blocks' ?(low=0) ?(count=(-1)) path = $/;"	v
+get_blocks'	src/fs.ml	/^let get_blocks' ?(low=0) ?(count=(-1)) path =$/;"	v
 get_blocks'	src/fs.mli	/^val get_blocks' : ?low:int -> ?count:int -> string -> Block.t list$/;"	v
+get_blocks_json	src/fs.mli	/^val get_blocks_json : ?low:int -> ?count:int -> string -> string list$/;"	v
 get_board	src/transaction_data.ml	/^let get_board t = t.board$/;"	v
 get_board	src/transaction_data.mli	/^val get_board : t -> boards$/;"	v
 get_count	src/blockchain.ml	/^let get_count bl = bl.count$/;"	v
@@ -118,7 +128,7 @@ get_latest	src/blockchain.ml	/^let get_latest bl = List.hd (get_blocks bl)$/;"	v
 get_latest	src/blockchain.mli	/^val get_latest : t -> Block.t$/;"	v
 get_previous_hash	src/block.ml	/^let get_previous_hash bl = bl.prev_hash$/;"	v
 get_previous_hash	src/block.mli	/^val get_previous_hash : t -> string$/;"	v
-get_reply_count	src/fs.ml	/^let get_reply_count path = $/;"	v
+get_reply_count	src/fs.ml	/^let get_reply_count path =$/;"	v
 get_text	src/transaction_data.ml	/^let get_text t = t.text$/;"	v
 get_text	src/transaction_data.mli	/^val get_text : t -> string$/;"	v
 get_thread_hash	src/transaction_data.ml	/^let get_thread_hash t = t.thread_hash$/;"	v
@@ -150,7 +160,7 @@ id	src/json_ds_t.ml	/^  id: int;$/;"	r	type:block_json
 id	src/json_ds_t.mli	/^  id: int;$/;"	r	type:block_json
 init_fs_exn	src/fs.ml	/^let init_fs_exn path ip =$/;"	v
 init_fs_exn	src/fs.mli	/^val init_fs_exn : string -> string -> unit$/;"	v
-iter_blocks	src/fs.ml	/^let iter_blocks ?(low=0) ?(count=(-1)) path f = $/;"	v
+iter_blocks	src/fs.ml	/^let iter_blocks ?(low=0) ?(count=(-1)) path f =$/;"	v
 iter_blocks	src/fs.mli	/^val iter_blocks : ?low:int -> ?count:int -> string -> (Block.t -> unit) -> unit$/;"	v
 json_ds_of_block	src/block.ml	/^let json_ds_of_block bl =$/;"	v
 json_ds_of_block	src/block.mli	/^val json_ds_of_block : t -> Json_ds_t.block_json$/;"	v
@@ -182,8 +192,8 @@ print_transaction	src/transaction.ml	/^let print_transaction t =$/;"	v
 print_transaction	src/transaction.mli	/^val print_transaction : t -> unit$/;"	v
 print_transaction_data	src/transaction_data.ml	/^let print_transaction_data td =$/;"	v
 print_transaction_data	src/transaction_data.mli	/^val print_transaction_data : t -> unit$/;"	v
-prop_thread	src/fs.ml	/^let prop_thread path board thash title username text timestamp = $/;"	v
-propagate_transaction	src/fs.ml	/^let propagate_transaction path transaction = $/;"	v
+prop_thread	src/fs.ml	/^let prop_thread path board thash title username text timestamp =$/;"	v
+propagate_transaction	src/fs.ml	/^let propagate_transaction path transaction =$/;"	v
 propagate_transaction	src/fs.mli	/^val propagate_transaction : string -> Transaction.t -> unit$/;"	v
 read__1	src/json_ds_j.ml	/^let read__1 = ($/;"	v
 read__2	src/json_ds_j.ml	/^let read__2 = ($/;"	v
@@ -273,16 +283,16 @@ version	src/json_ds_t.ml	/^  version: int;$/;"	r	type:block_json
 version	src/json_ds_t.mli	/^  version: int;$/;"	r	type:block_json
 write__1	src/json_ds_j.ml	/^let write__1 = ($/;"	v
 write__2	src/json_ds_j.ml	/^let write__2 = ($/;"	v
-write_all_blocks	src/fs.ml	/^let write_all_blocks path = $/;"	v
+write_all_blocks	src/fs.ml	/^let write_all_blocks path =$/;"	v
 write_all_blocks	src/fs.mli	/^val write_all_blocks : string -> unit$/;"	v
-write_block	src/fs.ml	/^let write_block path b = $/;"	v
+write_block	src/fs.ml	/^let write_block path b =$/;"	v
 write_block	src/fs.mli	/^val write_block : string -> Block.t -> unit$/;"	v
 write_block_json	src/json_ds_j.ml	/^let write_block_json : _ -> block_json -> _ = ($/;"	v
 write_block_json	src/json_ds_j.mli	/^val write_block_json :$/;"	v
 write_blockchain_json	src/json_ds_j.ml	/^let write_blockchain_json : _ -> blockchain_json -> _ = ($/;"	v
 write_blockchain_json	src/json_ds_j.mli	/^val write_blockchain_json :$/;"	v
-write_reply	src/fs.ml	/^let write_reply path index timestamp username text = $/;"	v
-write_reply_count	src/fs.ml	/^let write_reply_count path count = $/;"	v
+write_reply	src/fs.ml	/^let write_reply path index timestamp username text =$/;"	v
+write_reply_count	src/fs.ml	/^let write_reply_count path count =$/;"	v
 write_transaction_data_json	src/json_ds_j.ml	/^let write_transaction_data_json : _ -> transaction_data_json -> _ = ($/;"	v
 write_transaction_data_json	src/json_ds_j.mli	/^val write_transaction_data_json :$/;"	v
 write_transaction_json	src/json_ds_j.ml	/^let write_transaction_json : _ -> transaction_json -> _ = ($/;"	v

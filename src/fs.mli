@@ -10,7 +10,7 @@ val init_fs_exn : string -> string -> unit
 (** Propagates a transaction to the disk in readable form **)
 val propagate_transaction : string -> Transaction.t -> unit
 
-(** Writes a raw block to the blocks/ directory and propagates all 
+(** Writes a raw block to the blocks/ directory and propagates all
  * the transactions it contains **)
 val write_block : string -> Block.t -> unit
 
@@ -32,10 +32,19 @@ val check_individual_blocks : string -> bool
 (** NOT IMPLEMENTED Sanity-check the whole blockchain **)
 val check_blockchain : string -> bool
 
-(** Return a list of blocks from blocks/ Not tail recursive, but doesn't 
+(** Return a list of blocks from blocks/ Not tail recursive, but doesn't
  * reverse the list **)
 val get_blocks : ?low:int -> ?count:int -> string -> Block.t list
 
-(** Return a list of blocks from blocks/ Tail recursive, but has to reverse 
+(** Return a list of blocks from blocks/ Tail recursive, but has to reverse
  * the list before returning it **)
 val get_blocks' : ?low:int -> ?count:int -> string -> Block.t list
+
+(** Get block by id (from blocks/) **)
+val get_block : string -> int -> Block.t
+
+(** Get a block json by id (from blocks/) **)
+val get_block_json : string -> int -> string option
+
+(** Get a range of json blocks **)
+val get_blocks_json : ?low:int -> ?count:int -> string -> string list

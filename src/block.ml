@@ -59,9 +59,9 @@ let block_of_json_ds bl =
   create_block bl.version bl.id bl.prev_hash filtered bl.timestamp bl.hash
 
 let json_ds_of_block bl =
-  let i = get_id bl 
+  let i = get_id bl
   and ph = get_previous_hash bl
-  and trs = get_transactions bl 
+  and trs = get_transactions bl
   and ts = get_timestamp bl
   and h = get_hash bl in
   let open Json_ds_t in
@@ -72,3 +72,7 @@ let json_ds_of_block bl =
     timestamp = ts;
     hash = h
   }
+
+let block_of_string s =
+  let jds = Json_ds_j.block_json_of_string s in
+  block_of_json_ds jds
