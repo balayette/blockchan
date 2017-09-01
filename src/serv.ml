@@ -17,20 +17,73 @@ let server_command_of_path = function
   | "/transaction" -> POST_TRANSACTION
   | _ -> UNKNOWN
 
+
+let blocks_request uri =
+  let id = Uri.get_query_param uri "id" in
+  match id with
+  | None -> ("", `Bad_request)
+  | Some x -> (
+    try (
+      let x = int_of_string x in
+      match Fs.get_block_json "./blockchan_data" x with
+      | None -> ("", `OK)
+      | Some b -> (b, `OK)
+    )
+    with Failure _ -> ("", `Bad_request)
+  )
+
+let post_request uri transactions = ("", `Bad_request)
+
+let process_request req transactions =
+  let uri = req |> Request.uri |> Uri.path in
+  match uri |> server_command_of_path with
+  | UNKNOWN -> ("", `Not_found)
+  | GET_BLOCKS -> blocks_request (req |> Request.uri)
+  | POST_TRANSACTION -> post_request (req |> Request.uri) transactions
+
 let server =
-  let g = Block.genesis_block () in
-    let callback _conn req body =
-    let uri = req |> Request.uri |> Uri.path |> server_command_of_path in
-    Printf.printf "Path : %s\n" (req |> Request.uri |> Uri.path);
-    let (resp, code) = match uri with UNKNOWN -> ("nok", `Not_found) | _ -> ("Ok", `OK) in
-    (fun r -> Printf.sprintf "%s" r) =|< (Lwt.return resp)
-    >>= (fun body -> Block.print_block g; Server.respond_string ~status:code ~body ())
+  let transactions = ref [] in
+  let callback _conn req body =
+    Printf.printf "Path : %s\n%!" (req |> Request.uri |> Uri.path_and_query);
+    let (resp, code) = process_request req transactions in
+    (fun r -> Printf.printf "Response : %s\n%!" r; r) =|< (Lwt.return resp)
+    >>= (fun body -> Server.respond_string ~status:code ~body ())
   in
   Server.create ~mode:(`TCP (`Port 8000)) (Server.make ~callback ())
 
-(* let () = ignore (Lwt_main.run server) *)
+let () = ignore (Lwt_main.run server)
 
-let () =
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(* let () = *)
   (* Fs.init_fs_exn "./blockchan_data/" "127.0.0.1"; *)
   (* let td = Transaction_data.new_transaction_data *)
   (*   ~username:"Nicolas" *)
@@ -57,5 +110,5 @@ let () =
   (*   Fs.write_block "./blockchan_data/" g; *)
   (*   Fs.write_block "./blockchan_data/" b; *)
   (* Fs.get_block "./blockchan_data" 0 |> Block.print_block *)
-  let bs = Fs.get_blocks_json "./blockchan_data" in
-  List.iter (fun b -> print_string b; print_string "\n") bs
+  (* let bs = Fs.get_blocks_json "./blockchan_data" in *)
+  (* List.iter (fun b -> print_string b; print_string "\n") bs *)

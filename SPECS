@@ -89,12 +89,12 @@ III) The server
 
 The server listens for requests on a set of URIs.
 
-- GET /get?id=x -> The server will respond with a list of
-blocks (10 at a time max), starting from id (x + 1). If the list is empty,
-x is the id of the latest block on this server.
+- GET /get?id=x -> The server will respond with the block with id x in json
+format. If the response is empty, then no block with this id exists on the
+server
 
-- POST /transaction {transaction=x} -> The server will process the json encoded
-transaction x and add it to the next block, if it is valid.
+- POST /transaction {transaction_data=x} -> The server will process the json encoded
+transaction_data x and add it to the next block, if it is valid.
 
 Other URIs and methods will be ignored.
 

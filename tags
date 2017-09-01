@@ -73,6 +73,7 @@ blockchain_json_of_string	src/json_ds_j.mli	/^val blockchain_json_of_string :$/;
 blocks	src/blockchain.ml	/^    blocks : Block.t list;$/;"	r	type:t
 blocks	src/json_ds_t.ml	/^type blockchain_json = { count: int; blocks: block_json list }$/;"	r	type:blockchain_json
 blocks	src/json_ds_t.mli	/^type blockchain_json = { count: int; blocks: block_json list }$/;"	r	type:blockchain_json
+blocks_request	src/serv.ml	/^let blocks_request uri =$/;"	v
 board	src/json_ds_t.ml	/^  board: string;$/;"	r	type:transaction_data_json
 board	src/json_ds_t.mli	/^  board: string;$/;"	r	type:transaction_data_json
 board	src/transaction_data.ml	/^  { board : boards;$/;"	r	type:t
@@ -80,7 +81,6 @@ board_of_string	src/transaction_data.ml	/^let board_of_string = function$/;"	v
 board_of_string	src/transaction_data.mli	/^val board_of_string : string -> boards option$/;"	v
 boards	src/transaction_data.ml	/^type boards =$/;"	t
 boards	src/transaction_data.mli	/^type boards =$/;"	t
-bs	src/serv.ml	/^  let bs = Fs.get_blocks_json ".\/blockchan_data" in$/;"	v
 check_blockchain	src/fs.ml	/^let check_blockchain path = failwith "Not implemented"$/;"	v
 check_blockchain	src/fs.mli	/^val check_blockchain : string -> bool$/;"	v
 check_individual_blocks	src/fs.ml	/^let check_individual_blocks path = failwith "Not implemented"$/;"	v
