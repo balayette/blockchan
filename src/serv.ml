@@ -32,26 +32,59 @@ let blocks_request uri =
     with Failure _ -> ("", `Bad_request)
   )
 
-let post_request uri transactions = ("", `Bad_request)
+let post_request body transactions transaction_count =
+  (* let rec aux l = match l with *)
+  (*   | e::l -> Printf.printf "%s\n%!" e; aux l *)
+  (*   | [] -> () *)
+  (* in aux body; *)
+  ("", `Bad_request)
 
-let process_request req transactions =
+let process_request req body transactions trans_count =
   let uri = req |> Request.uri |> Uri.path in
   match uri |> server_command_of_path with
   | UNKNOWN -> ("", `Not_found)
   | GET_BLOCKS -> blocks_request (req |> Request.uri)
-  | POST_TRANSACTION -> post_request (req |> Request.uri) transactions
+  | POST_TRANSACTION -> post_request (body |> Body.to_string_list) transactions trans_count
 
 let server =
   let transactions = ref [] in
+  let trans_count = ref 0 in
   let callback _conn req body =
     Printf.printf "Path : %s\n%!" (req |> Request.uri |> Uri.path_and_query);
-    let (resp, code) = process_request req transactions in
+    let (resp, code) = process_request req body transactions trans_count in
     (fun r -> Printf.printf "Response : %s\n%!" r; r) =|< (Lwt.return resp)
     >>= (fun body -> Server.respond_string ~status:code ~body ())
   in
   Server.create ~mode:(`TCP (`Port 8000)) (Server.make ~callback ())
 
-let () = ignore (Lwt_main.run server)
+let () =
+  Printf.printf "Server started\n%!";
+  Fs.init_fs_exn "./blockchan_data/" "127.0.0.1";
+  let td = Transaction_data.new_transaction_data
+    ~username:"Nicolas"
+    ~thread_name:"I love this"
+    ~text:"I'm posting a new thread"
+    Transaction_data.CONSUMER_TECH
+    Transaction_data.NEW_THREAD
+    in
+    Transaction_data.print_transaction_data td;
+    let tra = Transaction.new_transaction td in
+    Transaction.print_transaction tra;
+    let thash = Crypto.thread_hash td in
+    let td2 = Transaction_data.new_transaction_data
+    ~text:"And I'm answering"
+    ~thread_hash:thash
+    Transaction_data.CONSUMER_TECH
+    Transaction_data.REPLY
+    in
+    Transaction_data.print_transaction_data td2;
+    let tra2 = Transaction.new_transaction td2 in
+    let g = Block.genesis_block () in
+    let b = Block.new_block g [tra; tra2] in
+    Block.print_block b;
+    Fs.write_block "./blockchan_data/" g;
+    Fs.write_block "./blockchan_data/" b;
+  ignore (Lwt_main.run server)
 
 
 

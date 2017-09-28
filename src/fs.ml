@@ -44,8 +44,6 @@ let write_reply path index timestamp username text =
   write_reply_count path index
 
 
-
-
 let prop_thread path board thash title username text timestamp =
   let b = Transaction_data.string_of_board board in
   Printf.printf "Creating a new thread with hash : %s" thash;
@@ -128,7 +126,6 @@ let for_all_blocks ?(low=0) ?(count=(-1)) path f =
       true
     )
   in aux low count
-
 
 let get_blocks ?(low=0) ?(count=(-1)) path =
   let rec aux index count =
