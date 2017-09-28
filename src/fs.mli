@@ -7,6 +7,12 @@ exception Directory_creation_failed of string
 (** Create a blockchan_data directory at the specified path **)
 val init_fs_exn : string -> string -> unit
 
+(** Read the block count from the filesystem **)
+val get_block_count : string -> int
+
+(** Write the block count to the filesystem **)
+val write_block_count : string -> int -> unit
+
 (** Propagates a transaction to the disk in readable form **)
 val propagate_transaction : string -> Transaction.t -> unit
 

@@ -1,0 +1,1 @@
+curl --data "{\"board\":\"$1\",\"kind\":\"REPLY\",\"username\":\"$2\",\"thread_name\":\"\",\"text\":\"$3\",\"thread_hash\":\"$4\",\"timestamp\":1506634591}" http://localhost:8000/transaction

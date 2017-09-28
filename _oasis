@@ -12,7 +12,7 @@ Executable "server"
     Path: src/
     MainIs: serv.ml
     CompiledObject: best
-    BuildDepends: digestif.ocaml, yojson, core, threads, atdgen, cohttp-lwt-unix, lwt
+    BuildDepends: digestif.ocaml, yojson, core, threads, atdgen, cohttp-lwt-unix, lwt, lwt.ppx
 
 Executable "client"
     Path: src/

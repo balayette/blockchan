@@ -29,12 +29,19 @@ let init_fs_exn path ip =
       Core.Out_channel.write_lines (path ^ "/server") [ip];
       print_string "Created\n";
       create_dir (path ^ "/blocks");
+      Core.Out_channel.write_all (path ^ "/blocks/count") ("0");
       create_dir (path ^ "/blockchan");
       create_dir (path ^ "/blockchan/boards");
       create_dir (path ^ "/blockchan/boards/g");
       create_dir (path ^ "/blockchan/boards/cg");
       create_dir (path ^ "/blockchan/boards/b");
     )
+
+let get_block_count path =
+  Core.In_channel.read_all (path ^ "/blocks/count") |> int_of_string
+
+let write_block_count path count =
+  Core.Out_channel.write_all (path ^ "/blocks/count") (string_of_int count)
 
 let write_reply_count path count =
   Core.Out_channel.write_all (path ^ "/count") (string_of_int count)
@@ -43,18 +50,25 @@ let write_reply path index timestamp username text =
   Core.Out_channel.write_lines (path ^ "/" ^ (string_of_int index)) [string_of_int timestamp; username; text];
   write_reply_count path index
 
-
 let prop_thread path board thash title username text timestamp =
   let b = Transaction_data.string_of_board board in
   Printf.printf "Creating a new thread with hash : %s" thash;
   let complete_path = Printf.sprintf "%s/blockchan/boards/%s/%s/" path b thash in
+  try(
+    if Sys.is_directory complete_path then (
+      ()
+    )
+    else (
+      ()
+    )
+  )
+  with Sys_error _ -> (
   create_dir complete_path;
   Core.Out_channel.write_lines (complete_path ^ "/title") [title];
   write_reply complete_path 0 timestamp username text
-
+)
 let get_reply_count path =
   Core.In_channel.read_all (path ^ "/count") |> String.trim |> int_of_string;;
-
 
 let prop_reply path board thash username text timestamp =
   Printf.printf "Creating a new reply\n";
