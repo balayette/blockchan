@@ -47,7 +47,7 @@ let write_reply_count path count =
   Core.Out_channel.write_all (path ^ "/count") (string_of_int count)
 
 let write_reply path index timestamp username text =
-  Core.Out_channel.write_lines (path ^ "/" ^ (string_of_int index)) [string_of_int timestamp; username; text];
+  Core.Out_channel.write_lines (path ^ "/" ^ (string_of_int index)) [string_of_int timestamp; string_of_int index; username; text];
   write_reply_count path index
 
 let prop_thread path board thash title username text timestamp =
